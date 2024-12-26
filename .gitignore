@@ -1,0 +1,8 @@
+.env
+*.jpg
+*.png
+*.PNG
+*.jpeg
+*.mp4
+imagenes/
+venv/
