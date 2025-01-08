@@ -1,0 +1,13 @@
+
+
+.container_registro
+{
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+
+.formWi{
+    width: 500px;
+}
+

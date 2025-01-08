@@ -1,0 +1,48 @@
+#buttonEstado{
+    width: max-content;
+    height: max-content;
+    padding: 2px 2px;
+    font-size: 12px;
+}
+
+.select_container {
+    position: relative;
+    width: 200px;
+    font-family: Arial, sans-serif;
+  }
+
+ .select_header {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+.select_options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+ .select_container:hover .select_options {
+    display: block;
+  }
+
+ .select_option {
+    padding: 5px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+ .select_option:hover {
+    background-color: #f0f0f0;
+  }
