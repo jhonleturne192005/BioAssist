@@ -1,0 +1,7 @@
+Django==4.2.9
+djangorestframework==3.14.0
+opencv-python==4.9.0.80
+opencv_contrib_python
+django-cors-headers
+imutils
+pillow==11.0.0

@@ -1,0 +1,10 @@
+.env
+*.jpg
+*.png
+*.PNG
+*.jpeg
+*.mp4
+*.xml
+api/imagenes/
+api/models/
+api/video/

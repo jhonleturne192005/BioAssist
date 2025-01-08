@@ -1,0 +1,11 @@
+https://osirusdjodji.medium.com/handling-cors-in-django-rest-framework-a-comprehensive-guide-ec11b0bc6807
+pip install -r ./requeriments.txt
+
+
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt    
+
+
+django-admin startproject apiproject
+py manage.py startapp [name application]
