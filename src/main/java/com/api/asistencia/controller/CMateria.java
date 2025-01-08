@@ -96,6 +96,40 @@ public class CMateria
     }
     
     
+    
+    @PostMapping("/activar")
+    public ResponseEntity<?> ActivarMateria(@RequestParam(value="idmateria") Long idmateria)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            
+            List<ModelMaterias> lstbusquedamaterias=smaterias.BuscarPorIdMateria(idmateria);
+            
+            if(idmateria!=null)
+            {
+                ModelMaterias mmg=smaterias.activar(lstbusquedamaterias.get(0));
+                if(mmg.getIdmateria()>0)
+                    response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_DATOS_INCOMPLETOS);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+
+    }
+    
+    
+    
     @PostMapping("/actualizar")
     public ResponseEntity<?> ActualizarMateria(ModelMaterias modelmaterias)
     {
@@ -158,5 +192,41 @@ public class CMateria
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
+    
+    
+    
+    
+    @PostMapping("/obtenermateriaid")
+    public ResponseEntity<?> ObtenerMateriaPorID(@RequestParam(value="idmateria") Long idmateria)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelMaterias> lstmaterias=smaterias.BuscarPorIdMateria(idmateria);
+
+            if(!lstmaterias.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lstmaterias);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+    
+    
+    
+    
     
 }

@@ -38,7 +38,7 @@ public class SMateriasPorPersona
     
     public List<ModelMateriasPorPersona> listarPorMateria(Long idmateria)
     {
-        return imateriaporpersona.BuscarMaterias(idmateria);
+        return imateriaporpersona.ListarPorMaterias(idmateria);
     }   
         
     public List<ModelMateriasPorPersona> listarPorPersona(Long idpersona)

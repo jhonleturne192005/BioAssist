@@ -34,12 +34,18 @@ public class SHorario
     
     public List<ModelHorario> ListarHorarioPorCurso(Long idcurso)
     {
-        return ihorario.BuscarPorIdCurso(idcurso);
+        return ihorario.BuscarHorariosPorIdCurso(idcurso);
     }
     
     public List<ModelHorario> ListarHorario(Long idhorario)
     {
         return ihorario.findByIdhorario(idhorario);
+    }
+    
+    
+    public List<ModelHorario> Listar()
+    {
+        return ihorario.findAll();
     }
     
     

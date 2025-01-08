@@ -20,9 +20,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface Iasistencia extends JpaRepository<ModelAsistencia,Serializable>
 {
-    @Query(value="select * from func_listarregistros()",nativeQuery=true)
+    @Query(value="select * from func_listarasistenciaporpersona(:idpersona)",nativeQuery=true)
     public List<ModelAsistencia> ListarAsistenciaPorPersona(Long idpersona);   
     
-    @Query(value="select * from func_listarregistros()",nativeQuery=true)
+    @Query(value="select * from func_listarasistenciaporhorario(:idpersona)",nativeQuery=true)
     public List<ModelAsistencia> ListarAsistenciaPorHorario(Long idpersona);   
 }

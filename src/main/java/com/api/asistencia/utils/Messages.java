@@ -16,23 +16,31 @@ public class Messages
     public static String OPERACION_CORRECTA="Datos cargados correctamente";
     public static String INICIO_SESSION_CORRECTO="Ha iniciado session correctamente";
     public static String CERRAR_SESSION="La session se cerro correctamente";
+    public static String ENTRENADO_CORRECTAMENTE="El modelo se a entrenado correctamente";
+
     
-    
-     //errores
+    //errores
     public static String YA_REGISTRO="Ya se encuentra registrado";
     public static String ERROR_DATOS_NO_ENCONTRADOS_LOGIN="El correo o la contraseña son incorrectas";
     public static String DATOS_INCORRECTOS="Correo o Contraseña incorrecta";
     public static String DATOS_EXISTENTES="Datos existentes en el sistema";
     public static String ERROR_SISTEMA="Ha ocurrido un error en el sistema";
     public static String ERROR_DATOS_NO_ENCONTRADOS_BUSQUEDA="No existen datos";
+    public static String NO_DATA="No existen datos";
 
     //keys
+    
+    public static String ESTADO="estado";
+    public static String CORREO="correo";
     public static String ADMIN="admin";
     public static String KEY="key";
     public static String STATUS_LOGIN="status";
     public static String DATA="data";
     public static String ERROR_KEY="error";
     public static String SUCCESSFUL_KEY="successful";
+    public static String MODELO="modelo";
+
+
     
     public static final String EX_MESSAGE_UNIQUE="could not execute statement [ERROR: llave duplicada viola restricción de unicidad «registro_%s_key»";
     public static String EX_TELEFONO_EXISTENTE=String.format(EX_MESSAGE_UNIQUE, "numero_telefono");

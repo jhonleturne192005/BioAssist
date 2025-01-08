@@ -98,8 +98,38 @@ public class CMateriasPorPersona
     }
     
     
+    @PostMapping("/listar")
+    public ResponseEntity<?> Listar()
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelMateriasPorPersona> lstmateriasporpersonabusqueda=smateriasPorPersona.listar();
+
+            if(!lstmateriasporpersonabusqueda.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lstmateriasporpersonabusqueda);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+    
+    
     @PostMapping("/listarporpersona")
-    public ResponseEntity<?> ListarAsistenciaPorPersona(@RequestParam(value="idpersona") Long idpersona)
+    public ResponseEntity<?> ListarMateriaPorPersonaPorPersona(@RequestParam(value="idpersona") Long idpersona)
     {
         Map<String,Object> response=new HashMap();
         try
@@ -128,7 +158,7 @@ public class CMateriasPorPersona
     
     
     @PostMapping("/listarpormateria")
-    public ResponseEntity<?> ListarAsistenciaPorMateria(@RequestParam(value="idmateria") Long idmateria)
+    public ResponseEntity<?> ListarMateriaPorPersonaPorMateria(@RequestParam(value="idmateria") Long idmateria)
     {
         Map<String,Object> response=new HashMap();
         try
@@ -155,4 +185,34 @@ public class CMateriasPorPersona
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
 
+    
+    @PostMapping("/listarmateriaporpersonaid")
+    public ResponseEntity<?> ListarMateriaPorPersonaById(@RequestParam(value="idmateriaporpersona") Long idmateriaporpersona)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelMateriasPorPersona> lstmateriasporpersonabusqueda=smateriasPorPersona.BuscarPorIdMateriasPorPersona(idmateriaporpersona);
+
+            if(!lstmateriasporpersonabusqueda.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lstmateriasporpersonabusqueda);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+
+    
 }

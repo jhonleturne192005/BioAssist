@@ -29,7 +29,7 @@ public class SMatriculacion
     
     public List<ModelMatriculacion> listarPorEstudiante(Long idpersona)
     {
-        return imatriculacion.BuscarPorIdpersona(idpersona);
+        return imatriculacion.BuscarMatriculacionPorIdpersona(idpersona);
     }
     
     public List<ModelMatriculacion> listar()

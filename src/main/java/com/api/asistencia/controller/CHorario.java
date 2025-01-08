@@ -107,8 +107,8 @@ public class CHorario
     }
 
     
-    @PostMapping("/listar")
-    public ResponseEntity<?> ListarHorarios(@RequestParam(value="idcurso") Long idcurso)
+    @PostMapping("/listarhorarioporcurso")
+    public ResponseEntity<?> ListarHorariosporcurso(@RequestParam(value="idcurso") Long idcurso)
     {
         Map<String,Object> response=new HashMap();
         try
@@ -136,7 +136,62 @@ public class CHorario
     }
     
     
+    @PostMapping("/obtenerhorarioporid")
+    public ResponseEntity<?> ObtenerHorarioPorId(@RequestParam(value="idhorario") Long idhorario)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelHorario> lsthorarios=shorario.ListarHorario(idhorario);
+
+            if(!lsthorarios.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lsthorarios);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
     
+    
+    @PostMapping("/listar")
+    public ResponseEntity<?> Listar()
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelHorario> lsthorarios=shorario.Listar();
+
+            if(!lsthorarios.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lsthorarios);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
     
     
 }

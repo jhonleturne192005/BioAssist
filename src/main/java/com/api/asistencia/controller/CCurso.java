@@ -65,7 +65,7 @@ public class CCurso
     
     
     @PostMapping("/desactivar")
-    public ResponseEntity<?> DesactivarMateria(@RequestParam(value="idcurso") Long idcurso)
+    public ResponseEntity<?> DesactivarCurso(@RequestParam(value="idcurso") Long idcurso)
     {
         Map<String,Object> response=new HashMap();
         try
@@ -93,6 +93,38 @@ public class CCurso
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
 
     }
+    
+    
+    @PostMapping("/activar")
+    public ResponseEntity<?> ActivarCurso(@RequestParam(value="idcurso") Long idcurso)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            if(idcurso!=null)
+            {
+                List<ModelCurso> lstbusquedacurso=scurso.BuscarPorIdCurso(idcurso);
+
+                ModelCurso mmg=scurso.activar(lstbusquedacurso.get(0));
+                if(mmg.getIdcurso()>0)
+                    response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_DATOS_INCOMPLETOS);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+
+    }
+    
     
     
     @PostMapping("/actualizar")
@@ -157,6 +189,36 @@ public class CCurso
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
+    
+    
+    @PostMapping("/obtenercursoid")
+    public ResponseEntity<?> ObtenerCursoPorID(@RequestParam(value="idcurso") Long idcurso)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelCurso> lstcursos=scurso.BuscarPorIdCurso(idcurso);
+
+            if(!lstcursos.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lstcursos);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
     
     
     

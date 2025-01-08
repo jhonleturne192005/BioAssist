@@ -20,8 +20,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface Ihorario extends JpaRepository<ModelHorario,Serializable>
 {
-    @Query(value="select * from func_listarregistros()",nativeQuery=true)
-    public List<ModelHorario> BuscarPorIdCurso(Long idcurso);
+    @Query(value="select * from func_listarhorarioporcurso(:idcurso)",nativeQuery=true)
+    public List<ModelHorario> BuscarHorariosPorIdCurso(Long idcurso);
 
     public List<ModelHorario> findByIdhorario(Long idhorario);   
 }

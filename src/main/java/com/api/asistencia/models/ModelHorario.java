@@ -48,7 +48,7 @@ public class ModelHorario
     @ManyToOne
     @JoinColumn(name = "idmateriasporpersona", nullable = true, unique = false)
     ModelMateriasPorPersona idmateriasporpersona;
-      
+    
     @ManyToOne
     @JoinColumn(name = "iddiassemana", nullable = true, unique = false)
     ModelDiasSemana iddiassemana;

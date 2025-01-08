@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface Imatriculacion extends JpaRepository<ModelMatriculacion,Serializable>
 {
-    @Query(value="select * from func_listarregistros()",nativeQuery=true)
-    public List<ModelMatriculacion> BuscarPorIdpersona(Long idpersona);   
+    @Query(value="select * from func_listarmatriculacionporidpersona(:idpersona)",nativeQuery=true)
+    public List<ModelMatriculacion> BuscarMatriculacionPorIdpersona(Long idpersona);   
 }
 

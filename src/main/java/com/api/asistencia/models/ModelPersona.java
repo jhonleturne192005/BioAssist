@@ -76,6 +76,9 @@ public class ModelPersona
     @Column(name = "estadopersona", nullable = false)
     Boolean estadopersona=true;
     
+    @Column(name = "estadopersonaedicion", nullable = false)
+    Boolean estadopersonaedicion=true;
+    
     @Column(name = "administrador", nullable = false)
     Boolean administrador=false;
     

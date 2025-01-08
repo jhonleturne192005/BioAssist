@@ -22,10 +22,10 @@ public interface IMateriasPorPersona extends JpaRepository<ModelMateriasPorPerso
 {
     public List<ModelMateriasPorPersona> findByIdmateriaporpersona(Long idmateriaporpersona);   
     
-    @Query(value="select * from func_listarregistros()",nativeQuery=true)  
+    @Query(value="select * from func_buscarmateriasporpersona(:idpersona)",nativeQuery=true)  
     public List<ModelMateriasPorPersona> BuscarMateriasPorPersona(Long idpersona);       
     
-    @Query(value="select * from func_listarregistros()",nativeQuery=true)  
-    public List<ModelMateriasPorPersona> BuscarMaterias(Long idmateria);    
+    @Query(value="select * from func_listarpormateriasporpersona()",nativeQuery=true)  
+    public List<ModelMateriasPorPersona> ListarPorMaterias(Long idmateria);    
 
 }

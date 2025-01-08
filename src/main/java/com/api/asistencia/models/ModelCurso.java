@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -43,5 +45,21 @@ public class ModelCurso
     
     @Column(name = "estadocurso", nullable = false)
     Boolean estadocurso=true;
+    
+    
+       
+    @PrePersist 
+    public  void  onPrePersist () { 
+        this.fecha_creacion_curso=LocalDateTime.now(); 
+        this.fecha_modificacion_curso=LocalDateTime.now(); 
+    } 
+
+    @PreUpdate 
+    public  void  onPreUpdate () { 
+        this.fecha_modificacion_curso=LocalDateTime.now(); 
+    } 
+    
+    
+    
     
 }
