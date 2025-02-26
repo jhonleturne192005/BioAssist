@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityLogin"
+    android:background="@color/colorFondo">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:id="@+id/camararedonda"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/botones"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="200dp"
+            >
+
+            <ImageView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="BioAssist"
+                android:src="@drawable/bioassist"
+                android:gravity="center_horizontal"
+                >
+            </ImageView>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Correo -->
+        <EditText
+            android:id="@+id/et_correo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"
+            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#000"
+            android:padding="5dp"
+            android:layout_marginBottom="10dp" /> <!-- Margen inferior de 10dp -->
+
+        <!-- Contraseña -->
+        <EditText
+            android:id="@+id/et_contrasenia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#000"
+            android:padding="5dp"
+            android:layout_marginBottom="10dp" /> <!-- Margen inferior de 10dp -->
+
+
+        <!-- Botón de Registrar -->
+        <Button
+            android:id="@+id/btn_iniciar_sesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Iniciar Sesión"
+            android:backgroundTint="@color/colorButtons"
+            android:textColor="#FFFFFF"
+            android:padding="5dp" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

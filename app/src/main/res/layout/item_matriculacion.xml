@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#D6D58E"
+    app:cardCornerRadius="16dp"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Materia:"
+                android:textColor="@color/black"
+                android:textStyle="bold">
+            </TextView>
+
+            <TextView
+                android:id="@+id/materia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Matematicas"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Curso:"
+                android:textColor="@color/black"
+                android:textStyle="bold">
+            </TextView>
+
+            <TextView
+                android:id="@+id/curso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profesor:"
+                android:textColor="@color/black"
+                android:textStyle="bold">
+            </TextView>
+
+            <TextView
+                android:id="@+id/profesor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jhon Leturne"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Horario:"
+                android:textColor="@color/black"
+                android:textStyle="bold">
+            </TextView>
+
+            <TextView
+                android:id="@+id/horario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lunes, 07:30 - 10:30 "
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnmatricularse"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:text="Matricularse"
+                android:backgroundTint="@color/colorButtons"
+                >
+            </Button>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
