@@ -40,6 +40,10 @@ public class ModelPersona
     @JoinColumn(name = "idtipopersona", nullable = true, unique = false)
     ModelTipoPersona idtipopersona;
     
+    @ManyToOne
+    @JoinColumn(name = "idgenero", nullable = true, unique = false)
+    ModelGenero idgenero;
+    
     @Column(name = "nombres", nullable = false, unique = false, length = 100)
     String nombres;
     

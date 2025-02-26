@@ -58,6 +58,8 @@ public class CPersona
                     {
                         response.put(Messages.SUCCESSFUL_KEY, Messages.INICIO_SESSION_CORRECTO); 
                         response.put(Messages.CORREO, correo.trim()); 
+                        response.put("etiqueta_reconocer", lstmpb.get(0).getEtiqueta_reconocer());
+                        response.put("id", lstmpb.get(0).getIdpersona()); 
                         response.put("admin", mpd.getAdministrador()); 
                         response.put(Messages.ESTADO,true); 
                         session.setAttribute(correo, mpd);
@@ -65,11 +67,13 @@ public class CPersona
                     else
                     {
                         response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_INCORRECTOS); 
+                        response.put(Messages.ESTADO,false); 
                     }
                 }
                 else
                 {
                     response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_INCORRECTOS); 
+                    response.put(Messages.ESTADO,false); 
                 }
             }
             else
@@ -337,10 +341,7 @@ public class CPersona
     }
     
     
-    
-    
-    
-     @PostMapping("/obtenerpersonaid")
+    @PostMapping("/obtenerpersonaid")
     public ResponseEntity<?> ObtenerPersonaPorID(@RequestParam(value="idpersona") Long idpersona)
     {
         Map<String,Object> response=new HashMap();
@@ -426,7 +427,9 @@ public class CPersona
                     !"".equals(modelpersona.getNombres().trim()) &&
                     !"".equals(modelpersona.getApellidos().trim()) && 
                     !"".equals(modelpersona.getCorreo().trim()) && 
-                    !"".equals(modelpersona.getNumero_telefono().trim()))
+                    !"".equals(modelpersona.getNumero_telefono().trim()) && 
+                    !"".equals(modelpersona.getIdgenero()!=null)
+                    )
             {
                 ModelPersona mp=lstmpg.get(0);
                 
@@ -434,7 +437,6 @@ public class CPersona
                 mp.setApellidos(modelpersona.getApellidos().trim());
                 mp.setCorreo(modelpersona.getCorreo().trim());
                 mp.setNumero_telefono(modelpersona.getNumero_telefono().trim());
-                        
                 mp.setEtiqueta_reconocer(!"".equals(modelpersona.getEtiqueta_reconocer().trim())?modelpersona.getEtiqueta_reconocer().trim():"");
 
                 
@@ -452,16 +454,19 @@ public class CPersona
                         mp.setCredenciales_telefono(modelpersona.getCredenciales_telefono().trim());
                         mp.setClave_generada_telefono(vechash[0]);
                         mp.setHash_generado(vechash[1]);
-                        mp.setEstadopersonaedicion(false); //desactiva la edicion   
+                        mp.setEstadopersonaedicion(false); //desactiva la edicion 
+                        response.put(Messages.DISPOSITIVO_MESSAGE, Messages.MENSAJE_DISPOSITIVO);
+                        response.put(Messages.DISPOSITIVO_ACTUALIZADO, true);
                     }
                     else
                     {
                         response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
                         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
                     }
-                }
-      
-                ModelPersona mpg=spersona.actualizar(modelpersona,actualizar_contrasenia);
+                }else  response.put(Messages.DISPOSITIVO_ACTUALIZADO, false);
+                
+
+                ModelPersona mpg=spersona.actualizar(mp,actualizar_contrasenia);
                 if(mpg.getIdpersona()>0)
                     response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
                 
@@ -483,23 +488,22 @@ public class CPersona
     }
     
     
-    
-    @PostMapping("/reconocimientofacialactualizar")
-    public ResponseEntity<?> ActualizarReconocimiento(@RequestParam("video") MultipartFile objvideousuario,
-                                                @RequestParam("correo") String correo,
+    @PostMapping("/actualizaretiquetareconocimientousuario")
+    public ResponseEntity<?> ActualizarEtiquetaReconocimientoUsuario(@RequestParam(value="idpersona") Long idpersona,
+            @RequestParam(value="etiqueta") String etiqueta,
                                                 HttpSession session)
     {
         Map<String,Object> response=new HashMap();
         try
         {
-            if(objvideousuario!=null && correo.trim()!="")
+            System.out.println("se actualizooooooooooooo");
+            if(idpersona!=null)
             {
-                
-//                if()
-//                {
-//                    List<ModelPersona> lstmpb=spersona.BuscarPersonaPorCorreo(correo.trim());
-//
-//                }
+                List<ModelPersona> lstmpg=spersona.BuscarPorIdPersona(idpersona);
+                ModelPersona mp=lstmpg.get(0);
+                mp.setEtiqueta_reconocer(etiqueta);
+                ModelPersona mpg=spersona.actualizar(mp,false);
+                response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS);
             }
             else
             {

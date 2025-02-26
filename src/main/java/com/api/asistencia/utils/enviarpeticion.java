@@ -38,12 +38,13 @@ public class enviarpeticion
      */
     public static void main(String[] args) 
     {
-        Integer opcion=4;
+        Integer opcion=2;
         switch(opcion) { 
             case 1 -> prueba();
             case 2 -> asignacion_de_recurso();
             case 3 -> entrenamiento_de_modelo();
             case 4 -> reconocimiento();
+            case 5 -> base64prueba();
             default -> System.out.println("Opcion incorrecta");
         }
     
@@ -202,6 +203,20 @@ public class enviarpeticion
             System.out.println(ex.getMessage());
         }
     } 
+
+    private static void base64prueba() 
+    {
+        try{
+            String ruta_video = "D:\\jhon 9no semestre\\CIENCIA, TECNOLOGIA, SOCIEDAD E INNOVACION\\proyectofinal\\reconocimiento_facial\\video_mark.mp4";
+            InputStream is = new FileInputStream(ruta_video);
+            byte[] bytes = is.readAllBytes();
+            System.out.println(Base64.getEncoder().encodeToString(bytes));   
+        }
+        catch(Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+    }
     
     
 }

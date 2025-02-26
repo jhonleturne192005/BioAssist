@@ -14,11 +14,14 @@ import com.api.asistencia.utils.Messages;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -77,7 +80,7 @@ public class CReconocimiento
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
-    
+   
     
     @PostMapping("/listar")
     public ResponseEntity<?> ListarRecursos()
@@ -95,6 +98,73 @@ public class CReconocimiento
             else
             {
                 response.put(Messages.ERROR_KEY, Messages.NO_DATA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+    @PostMapping("/asignarrecurso")
+    public ResponseEntity<?> AsignarRecurso(@RequestBody  String base64recurso)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {   
+            System.out.println("Recurso: jejeje ");
+            //System.out.println(new JSONObject( base64recurso).getString("base64recurso"));
+
+            String ooiduser=ApiReconocimiento.AsignarRecurso(new JSONObject( base64recurso).getString("base64recurso").replace("\n",""));
+
+            System.out.println("OOID= "+ooiduser);
+            
+//String ooiduser="";
+            
+            if(ooiduser!=null)
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.ENTRENADO_CORRECTAMENTE);
+                response.put(Messages.OOID, ooiduser);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+   
+    
+    @PostMapping("/reconocer")
+    public ResponseEntity<?> Reconocer(@RequestParam(value="base64recurso") String base64recurso)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            System.out.println("Recurso: jejeje ");
+            System.out.println(base64recurso);
+            //JSONObject jo=ApiReconocimiento.Reconocer(base64recurso);
+            JSONObject jo=null;
+
+            if(jo!=null)
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.ENTRENADO_CORRECTAMENTE);
+                response.put(Messages.DATA, jo);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
                 return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
             }
         }

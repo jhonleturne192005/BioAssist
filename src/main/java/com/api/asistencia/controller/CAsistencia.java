@@ -6,6 +6,7 @@ package com.api.asistencia.controller;
 
 import com.api.asistencia.models.ModelAsistencia;
 import com.api.asistencia.models.ModelCurso;
+import com.api.asistencia.models.ModelHorario;
 import com.api.asistencia.models.ModelMatriculacion;
 import com.api.asistencia.models.ModelPersona;
 import com.api.asistencia.service.SAsistencia;
@@ -62,6 +63,42 @@ public class CAsistencia
 
     }
 
+  
+    @PostMapping("/listarmateriaparaasistenciaporestudiante")
+    public ResponseEntity<?> ListarMateriaPorAsistenciaPorEstudiante(@RequestParam(value="idpersona") Long idpersona)
+    {
+        System.out.println("jajaja= "+idpersona);
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelHorario> lstmpg=sasistencia.ListarMateriaParaAsistenciaPorEstudiante(idpersona);
+
+            if(!lstmpg.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lstmpg);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+ 
+    
+    
+    
+    /*NO SE USAN*/
+    
     
     @PostMapping("/listarporpersona")
     public ResponseEntity<?> ListarAsistenciaPorPersona(@RequestParam(value="idpersona") Long idpersona)

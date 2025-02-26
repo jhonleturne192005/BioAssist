@@ -24,5 +24,9 @@ public interface Iasistencia extends JpaRepository<ModelAsistencia,Serializable>
     public List<ModelAsistencia> ListarAsistenciaPorPersona(Long idpersona);   
     
     @Query(value="select * from func_listarasistenciaporhorario(:idpersona)",nativeQuery=true)
-    public List<ModelAsistencia> ListarAsistenciaPorHorario(Long idpersona);   
+    public List<ModelAsistencia> ListarAsistenciaPorHorario(Long idpersona);
+    
+    @Query(value="select * from func_listamateriaporestudianteparaasistencia(:idpersona)",nativeQuery=true)
+    public String ListarMateriaParaAsistencia(Long idpersona);  
+    
 }
