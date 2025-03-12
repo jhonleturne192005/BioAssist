@@ -9,6 +9,16 @@ function Login()
 {
     const navigate=useNavigate();
 
+    navigator.geolocation.getCurrentPosition((position)=>{
+        console.log(position.coords.latitude+" - "+position.coords.longitude);
+    },
+    (error)=>{
+        console.log(error.message);
+    },{
+        enableHighAccuracy:true
+    });
+
+
     const handleClickLogin=(e:React.FormEvent<HTMLFormElement>)=>
     {
         e.preventDefault();
@@ -21,20 +31,38 @@ function Login()
             const formData = new FormData();
             formData.append('correo',correo.trim());
             formData.append('contrasenia',contrasenia.trim());
-            console.log("Este es el curso= "+contrasenia);
 
+            navigator.geolocation.getCurrentPosition((position)=>{
+                console.log(position.coords.latitude+" - "+position.coords.longitude);
+                    
+                formData.append('longitud',position.coords.longitude.toString());
+                formData.append('latitud',position.coords.latitude.toString());
 
-            const promiseGuardarDatos=UseFetchPOSTEvent(formData,'persona/login');
-            promiseGuardarDatos.then(data=>
-            {
-                const dataLogin:InterfaceLogin=data.data;
-                localStorage.setItem(ADMIN,String(dataLogin.admin));
-                localStorage.setItem(KEY,dataLogin.correo);
-                console.log(data);
-                toast.success(data.data.successful)
-                navigate("/home");
-            })
-            .catch(err=>toast.error(err.response.data.error));
+                console.log("Este es el curso= "+contrasenia);
+                const promiseGuardarDatos=UseFetchPOSTEvent(formData,'persona/login');
+                promiseGuardarDatos.then(data=>
+                {
+                    const dataLogin:InterfaceLogin=data.data;
+    
+                    if(!dataLogin.estado){
+                        toast.error(dataLogin.successful);
+                        return;
+                    } 
+                    alert(String(dataLogin.admin))
+                    localStorage.setItem(ADMIN,String(dataLogin.admin));
+                    localStorage.setItem(KEY,dataLogin.correo);
+                    console.log(data);
+                    toast.success(data.data.successful)
+                    navigate("/home");
+                })
+                .catch(err=>toast.error(err.response.data.error));
+
+            },
+            (error)=>{
+                console.log(error.message);
+            },{
+                enableHighAccuracy:true
+            });
         }
         else{
             toast.error(ERROR_CAMPOS_VACIOS);

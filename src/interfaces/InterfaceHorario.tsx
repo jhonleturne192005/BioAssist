@@ -1,4 +1,4 @@
-import { InterfaceCurso } from "./InterfaceCurso";
+//import { InterfaceCurso } from "./InterfaceCurso";
 import { InterfaceDiaSemana } from "./InterfaceDiaSemana";
 import { InterfaceMateriaPorPersona } from "./InterfaceMateriaPorPersona";
 
@@ -7,7 +7,7 @@ export interface InterfaceHorario
     idhorario: number; 
     idmateriaporpersona: InterfaceMateriaPorPersona;
     iddia: InterfaceDiaSemana;
-    idcurso: InterfaceCurso;
+    //idcurso: InterfaceCurso;
     hora_inicio: number;
     minuto_inicio: number;
     hora_fin: number;

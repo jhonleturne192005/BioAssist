@@ -6,11 +6,12 @@ import SelectDiv from "../UtilsComponents/SelectDiv";
 import { InterfaceMateria } from "../../interfaces/InterfaceMateria";
 import { InterfacePersona } from "../../interfaces/InterfacePersona";
 import NavBarAdmin from "../UtilsComponents/NavBarAdmin";
+import { useNavigate } from "react-router-dom";
 
 
 function ListarMateriaPorPersona()
 {
-
+    const navigate=useNavigate();
     const formData = new FormData();
     formData.append('key',String(localStorage.getItem(KEY)));
 
@@ -30,10 +31,16 @@ function ListarMateriaPorPersona()
         setSelectProfesor(e.target.value);
     };
 
+    function cambiarvistacrear(e: React.MouseEvent<HTMLButtonElement, MouseEvent>)
+    {
+        e;
+        navigate("/crearmateriaporpersona");
+    }
 
     return(
         <>
             <NavBarAdmin/>
+            <button type="button" className="btn btn-warning m-3" onClick={cambiarvistacrear}>Crear</button>
             <div className="mb-3">
                 <label htmlFor="materia" className="form-label">Materia</label>
                 <select value={EselectMateria} onChange={handleChangeSelectMateria} id="materia" className="form-select" name="materia">

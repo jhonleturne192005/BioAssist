@@ -37,13 +37,8 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarScroll">
           <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
             <li className="nav-item">
-              <Link to={"/"} className="nav-link active">
-                Competencias
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/"} className="nav-link active">
-                Eventos
+              <Link to={"/materiasprofesor"} className="nav-link active">
+                Asistencias
               </Link>
             </li>
           </ul>

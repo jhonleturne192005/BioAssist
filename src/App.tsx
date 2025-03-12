@@ -11,6 +11,8 @@ import Home from "./components/home/Home";
 import MateriaPorPersona from "./components/Materia/MateriaPorPersona";
 import ListarMateriaPorPersona from "./components/Materia/ListarMateriaPorPersona";
 import Entrenamiento from "./components/Reconocimiento/Entrenamiento";
+import ListarMatriculados from "./components/Asistencia/ListarMatriculados";
+import ListarMateriasProfesor from "./components/Asistencia/ListarMateriasProfesor";
 
 
 //https://react-hot-toast.com/ --> para el toast
@@ -23,8 +25,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/matriculados/:idmateriasporpersona" element={<ListarMatriculados />} />
+        <Route path="/materiasprofesor" element={<ListarMateriasProfesor />} />
         <Route element={<ProtectedRoute/>}>
-          <Route path="/home" element={<Home />} />
           <Route path="/crearcurso" element={<Curso />} />
           <Route path="/listarcurso" element={<ListarCurso />} />
           <Route path="/actualizarcurso/:idcurso" element={<Curso />} />

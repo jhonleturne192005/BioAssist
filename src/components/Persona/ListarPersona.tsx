@@ -5,10 +5,11 @@ import { UseFetchPOST, UseFetchPOSTEvent } from "../../useFetch";
 import ButtonEstado from "../UtilsComponents/ButtonEstado";
 import SelectDiv from "../UtilsComponents/SelectDiv";
 import NavBarAdmin from "../UtilsComponents/NavBarAdmin";
+import { useNavigate } from "react-router-dom";
 
 function ListarPersona()
 {
-
+    const navigate=useNavigate();
     const formData = new FormData();
     formData.append('key',String(localStorage.getItem(KEY)),);
 
@@ -32,10 +33,16 @@ function ListarPersona()
         });
     }
 
+    function cambiarvistacrear(e: React.MouseEvent<HTMLButtonElement, MouseEvent>)
+    {
+        e;
+        navigate("/crearpersona");
+    }
 
     return(
         <>
             <NavBarAdmin/>
+            <button type="button" className="btn btn-warning m-3" onClick={cambiarvistacrear}>Crear</button>
             <div className="container mt-5">
                 <table className="table table-sm">
                     <thead className="text-muted">

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { KEY } from "../../Messages";
+import { ADMIN, KEY } from "../../Messages";
 
 function NavBarAdmin() {
 
@@ -11,7 +11,7 @@ function NavBarAdmin() {
     e;
     e.preventDefault();
     localStorage.removeItem(KEY);
-    localStorage.removeItem("admin");
+    localStorage.removeItem(ADMIN);
     navigate("/");
   }
 
@@ -38,17 +38,7 @@ function NavBarAdmin() {
           <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
             <li className="nav-item">
               <Link to={"/listarcompetencias"} className="nav-link active">
-                Competencias
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/"} className="nav-link active">
-                Eventos
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/"} className="nav-link active">
-                Reportes
+                Entrenamiento
               </Link>
             </li>
             <li className="nav-item dropdown">
@@ -56,13 +46,11 @@ function NavBarAdmin() {
                     Utilidades
                 </a>
                 <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#">Genero</a></li>
-                    <li><a className="dropdown-item" href="#">Modalidad</a></li>
-                    <li><a className="dropdown-item" href="#">Cinturon</a></li>
-                    <li><a className="dropdown-item" href="#">Categorias</a></li>
-                    <li><a className="dropdown-item" href="#">Pesos</a></li>
+                    <li><a className="dropdown-item" href="/listarcurso">Listar curso</a></li>
+                    <li><a className="dropdown-item" href="/listarmateria">Listar materia</a></li>
+                    <li><a className="dropdown-item" href="/listarpersona">Listar persona</a></li>
                     <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="#">Registro Ayuda</a></li>
+                    <li><a className="dropdown-item" href="/crearmateriaporpersona">Asignar materia a profesores</a></li>
                 </ul>
             </li>
           </ul>

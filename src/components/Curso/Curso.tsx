@@ -42,6 +42,7 @@ function Curso()
     }
     
     return(
+
         <div className={styles.container_registro}>
             <form method="POST" name="form" className={styles.formWi} onSubmit={handleClickGuardar} >
                 <div className="mb-3 controles_input">

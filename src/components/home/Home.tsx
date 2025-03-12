@@ -5,7 +5,7 @@ import NavBarAdmin from "../UtilsComponents/NavBarAdmin";
 
 function Home()
 {
-    const admin=Boolean(localStorage.getItem(ADMIN));
+    const admin=localStorage.getItem(ADMIN)==='true';
 
     return(
         <>
