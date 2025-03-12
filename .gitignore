@@ -4,5 +4,6 @@
 *.PNG
 *.jpeg
 *.mp4
+*.xml
 imagenes/
 venv/
