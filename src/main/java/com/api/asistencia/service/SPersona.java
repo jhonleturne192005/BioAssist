@@ -117,5 +117,10 @@ public class SPersona
         return ipersona.findByCorreo(correo);
     }
     
+    public List<ModelPersona> BuscarPorEtiquetaPersona(String etiqueta)
+    {
+        return ipersona.findByEtiquetareconocer(etiqueta);
+    }
+    
     
 }

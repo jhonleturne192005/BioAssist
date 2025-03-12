@@ -39,26 +39,35 @@ public class CPersona
     
     @PostMapping("/login")
     public ResponseEntity<?> Login(@RequestParam(value="correo") String correo,
-                                    @RequestParam(value="contrasenia") String contrasenia
+                                    @RequestParam(value="contrasenia") String contrasenia,
+                                    @RequestParam(value="longitud") String longitud,
+                                    @RequestParam(value="latitud") String latitud
                                     ,HttpSession session)
     {
         Map<String,Object> response=new HashMap();
         try
         {
-                       
+           
+            System.out.println("LOGINNNN");
+            System.out.println("LATITUD: "+latitud);
+            System.out.println("LONGITUD: "+longitud);
+            
             if(correo.trim()!="" && contrasenia.trim()!="")
             {
                 List<ModelPersona> lstmpb=spersona.BuscarPersonaPorCorreo(correo.trim());
 
-                
                 if(!lstmpb.isEmpty())
                 {
                     ModelPersona mpd=lstmpb.get(0);
+                    mpd.setLatitud(latitud);
+                    mpd.setLongitud(longitud);
+                    mpd=spersona.actualizar(mpd,false);
+    
                     if(mpd.getCorreo().trim().equals(correo) && mpd.getContrasenia().trim().equals(encryptString.encriptPassword(contrasenia)))
                     {
                         response.put(Messages.SUCCESSFUL_KEY, Messages.INICIO_SESSION_CORRECTO); 
                         response.put(Messages.CORREO, correo.trim()); 
-                        response.put("etiqueta_reconocer", lstmpb.get(0).getEtiqueta_reconocer());
+                        response.put("etiqueta_reconocer", lstmpb.get(0).getEtiquetareconocer());
                         response.put("id", lstmpb.get(0).getIdpersona()); 
                         response.put("admin", mpd.getAdministrador()); 
                         response.put(Messages.ESTADO,true); 
@@ -428,6 +437,7 @@ public class CPersona
                     !"".equals(modelpersona.getApellidos().trim()) && 
                     !"".equals(modelpersona.getCorreo().trim()) && 
                     !"".equals(modelpersona.getNumero_telefono().trim()) && 
+                    !"".equals(modelpersona.getCredenciales_telefono().trim()) && 
                     !"".equals(modelpersona.getIdgenero()!=null)
                     )
             {
@@ -437,7 +447,7 @@ public class CPersona
                 mp.setApellidos(modelpersona.getApellidos().trim());
                 mp.setCorreo(modelpersona.getCorreo().trim());
                 mp.setNumero_telefono(modelpersona.getNumero_telefono().trim());
-                mp.setEtiqueta_reconocer(!"".equals(modelpersona.getEtiqueta_reconocer().trim())?modelpersona.getEtiqueta_reconocer().trim():"");
+                //mp.setEtiquetareconocer(!modelpersona.getEtiquetareconocer().trim().isBlank() || !modelpersona.getEtiquetareconocer().trim().isEmpty()?mp.getEtiquetareconocer().trim():"");
 
                 
                 if(!"".equals(modelpersona.getContrasenia().trim())){
@@ -449,14 +459,19 @@ public class CPersona
                 {
                     if(!modelpersona.getCredenciales_telefono().trim().equals(""))
                     {
+
                         //creacion de claves unicas
                         String [] vechash=CreateHash.crearhashdatos(modelpersona.getCredenciales_telefono().trim());
                         mp.setCredenciales_telefono(modelpersona.getCredenciales_telefono().trim());
-                        mp.setClave_generada_telefono(vechash[0]);
-                        mp.setHash_generado(vechash[1]);
+                        mp.setClave_generada_telefono(vechash[1]);
+                        mp.setHash_generado(vechash[0]);
                         mp.setEstadopersonaedicion(false); //desactiva la edicion 
                         response.put(Messages.DISPOSITIVO_MESSAGE, Messages.MENSAJE_DISPOSITIVO);
                         response.put(Messages.DISPOSITIVO_ACTUALIZADO, true);
+                        
+                        System.out.println("id telefono= "+modelpersona.getCredenciales_telefono().trim());
+                        System.out.println("hash sistema= "+vechash[0]);
+                        
                     }
                     else
                     {
@@ -501,7 +516,7 @@ public class CPersona
             {
                 List<ModelPersona> lstmpg=spersona.BuscarPorIdPersona(idpersona);
                 ModelPersona mp=lstmpg.get(0);
-                mp.setEtiqueta_reconocer(etiqueta);
+                mp.setEtiquetareconocer(etiqueta);
                 ModelPersona mpg=spersona.actualizar(mp,false);
                 response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS);
             }

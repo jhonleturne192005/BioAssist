@@ -5,9 +5,13 @@
 package com.api.asistencia.service;
 
 import com.api.asistencia.models.ModelMateriasPorPersona;
+import com.api.asistencia.models.ModelPersona;
 import com.api.asistencia.repository.IMateriasPorPersona;
 import com.api.asistencia.repository.Idiassemana;
+import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +47,29 @@ public class SMateriasPorPersona
         
     public List<ModelMateriasPorPersona> listarPorPersona(Long idpersona)
     {
-        return imateriaporpersona.BuscarMateriasPorPersona(idpersona);
+        String resultjsonarray=imateriaporpersona.BuscarMateriasPorPersona(idpersona);
+        JSONArray ja=new JSONArray(resultjsonarray);
+        List<ModelMateriasPorPersona> lstmateriasporpersona=new ArrayList<>();
+        for (int i = 0; i < ja.length(); i++) {
+            
+            JSONObject jsonObject = ja.getJSONObject(i);
+            Long idpersonajo=jsonObject.getLong("idmateriaporpersona");
+            lstmateriasporpersona.add(this.BuscarPorIdMateriasPorPersona(idpersonajo).get(0));
+        }
+    
+        return lstmateriasporpersona;
     }
     
     public List<ModelMateriasPorPersona> BuscarPorIdMateriasPorPersona(Long idmateriasporpersona)
     {
         return imateriaporpersona.findByIdmateriaporpersona(idmateriasporpersona);
     }
+    
+    public String ListarAsistenciaMatriculados(Long idmateriasporpersona)
+    {
+        return imateriaporpersona.ListarAsistenciaMatriculados(idmateriasporpersona);
+    }
+    
     
     
 }

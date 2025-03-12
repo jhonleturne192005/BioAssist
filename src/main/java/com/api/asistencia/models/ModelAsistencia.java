@@ -44,8 +44,11 @@ public class ModelAsistencia
     @JoinColumn(name = "idhorario", nullable = true, unique = false)
     ModelHorario idhorario;
     
-    @Column(name = "ubicacion_radio", nullable = true, unique = false)
-    String ubicacion_radio;
+    @Column(name = "latitud", nullable = true)
+    String latitud;
+    
+    @Column(name = "longitud", nullable = true)
+    String longitud;
     
     @Column(name = "fecha_creacion_asistencia", nullable = false, unique = false)
     LocalDateTime fecha_creacion_asistencia;

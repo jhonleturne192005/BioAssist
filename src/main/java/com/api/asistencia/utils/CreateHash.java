@@ -19,12 +19,24 @@ public class CreateHash
     {
         UUID uuid = UUID.randomUUID();
         String hash_sistema=encryptString.encriptPassword(uuid.toString());
-        String hash_datos_sistema_movil=encryptString.encriptPassword(credenciales_telefono+uuid.toString());
+        String hash_datos_sistema_movil=encryptString.encriptPassword(credenciales_telefono+hash_sistema);
         return new String[]
         {
             hash_sistema,
             hash_datos_sistema_movil 
         };
     }
+    
+    public static String[] recrearhashdatos(String credenciales_telefono,String credenciales_sistema)
+    {
+        String hash_sistema=credenciales_sistema;
+        String hash_datos_sistema_movil=encryptString.encriptPassword(credenciales_telefono+hash_sistema);
+        return new String[]
+        {
+            hash_sistema,
+            hash_datos_sistema_movil 
+        };
+    }
+    
     
 }

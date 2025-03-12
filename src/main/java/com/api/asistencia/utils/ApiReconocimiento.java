@@ -23,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ApiReconocimiento 
 {
     
-    @Autowired
-    private static SRecursos srecursos;
-    
-    private static String URL_API_PYTHON="http://127.0.0.1:8000/api";
+    private final static String URL_API_PYTHON="http://127.0.0.1:8000/api";
     
     
     public static String EntrenarModelo()
@@ -101,13 +98,13 @@ public class ApiReconocimiento
     }
     
     
-    public static JSONObject Reconocer(String imagebase64)
+    public static JSONObject Reconocer(String imagebase64,String modelo)
     {
         try
         {
             Form form=new Form();
             form.param("imagen", imagebase64);
-            form.param("model", srecursos.listar().get(0).getNombremodeloxml());
+            form.param("model", modelo);
 
             Client client = ClientBuilder.newClient();
             WebTarget target = client.target(URL_API_PYTHON+"/reconocer/");
@@ -123,9 +120,9 @@ public class ApiReconocimiento
             respuesta=respuesta.substring(1,respuesta.length()-1);
             JSONObject jo=new JSONObject(respuesta);
             if (statusCode == 200) {
-                System.out.println(respuesta);
+                //System.out.println(respuesta);
                 System.out.println(new JSONObject(respuesta).getString("success"));
-                System.out.println(new JSONObject(respuesta).getString("nombre_modelo"));
+                //System.out.println(new JSONObject(respuesta).getString("nombre_modelo"));
                 System.out.println(statusCode);
             } 
             return jo;

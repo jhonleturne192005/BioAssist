@@ -20,6 +20,13 @@ public class contraseniaprueba {
         System.out.println(encryptString.encriptPassword("profesor456"));
         System.out.println(encryptString.encriptPassword("estudiante123"));
         System.out.println(encryptString.encriptPassword("estudiante456"));
+        
+        
+        System.out.println("JHON= "+encryptString.encriptPassword("jhon"));       
+        System.out.println("8A= "+encryptString.encriptPassword("ochoa"));
+        System.out.println("ORLANDO= "+encryptString.encriptPassword("orlando"));
+        System.out.println("CHAUFA= "+encryptString.encriptPassword("chaufa"));
+        
     }
     
 }

@@ -69,7 +69,13 @@ public class ModelPersona
     String hash_generado;
     
     @Column(name = "etiqueta_reconocer", nullable = true, unique = true) //unique //nullable
-    String etiqueta_reconocer;
+    String etiquetareconocer;
+    
+    @Column(name = "latitud", nullable = true) 
+    String latitud;    
+        
+    @Column(name = "longitud", nullable = true)
+    String longitud;
     
     @Column(name = "fecha_creacion_persona", nullable = false, unique = false)
     LocalDateTime  fecha_creacion_persona;

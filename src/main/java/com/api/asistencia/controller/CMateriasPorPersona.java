@@ -9,10 +9,12 @@ import com.api.asistencia.models.ModelCurso;
 import com.api.asistencia.models.ModelMateriasPorPersona;
 import com.api.asistencia.service.SMaterias;
 import com.api.asistencia.service.SMateriasPorPersona;
+import com.api.asistencia.service.SPersona;
 import com.api.asistencia.utils.Messages;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,9 @@ public class CMateriasPorPersona
 {
     @Autowired 
     SMateriasPorPersona smateriasPorPersona;  
+    
+    @Autowired 
+    SPersona spersona;
     
     
     @PostMapping("/crear")
@@ -129,11 +134,13 @@ public class CMateriasPorPersona
     
     
     @PostMapping("/listarporpersona")
-    public ResponseEntity<?> ListarMateriaPorPersonaPorPersona(@RequestParam(value="idpersona") Long idpersona)
+    public ResponseEntity<?> ListarMateriaPorPersonaPorPersona(@RequestParam(value="correopersona") String correopersona)
     {
         Map<String,Object> response=new HashMap();
         try
         {
+            Long idpersona=spersona.BuscarPersonaPorCorreo(correopersona).get(0).getIdpersona();
+            
             List<ModelMateriasPorPersona> lstmateriasporpersonabusqueda=smateriasPorPersona.listarPorPersona(idpersona);
 
             if(!lstmateriasporpersonabusqueda.isEmpty())
@@ -155,6 +162,32 @@ public class CMateriasPorPersona
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
+   
+    @PostMapping("/listarasistenciamatriculados")
+    public ResponseEntity<?> ListarAsistenciaMatriculados(@RequestParam(value="idmateriaporpersona") Long idmateriaporpersona)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            System.out.println(idmateriaporpersona);
+            String jsonstring=smateriasPorPersona.ListarAsistenciaMatriculados(idmateriaporpersona);
+                        System.out.println(jsonstring);
+
+            JSONArray ja =new JSONArray(jsonstring);
+   
+            response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+            response.put(Messages.DATA, ja.toList());
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+   
+    
     
     
     @PostMapping("/listarpormateria")

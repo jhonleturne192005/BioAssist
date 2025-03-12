@@ -7,8 +7,10 @@ package com.api.asistencia.controller;
 import com.api.asistencia.models.ModelMaterias;
 import com.api.asistencia.models.ModelPersona;
 import com.api.asistencia.models.ModelRecursos;
+import com.api.asistencia.service.SPersona;
 import com.api.asistencia.service.SRecursos;
 import com.api.asistencia.utils.ApiReconocimiento;
+import com.api.asistencia.utils.AsignarRecursoRequestCombinada;
 import com.api.asistencia.utils.CreateHash;
 import com.api.asistencia.utils.Messages;
 import java.util.HashMap;
@@ -35,6 +37,9 @@ public class CReconocimiento
     
     @Autowired
     SRecursos srecursos;
+    
+    @Autowired 
+    SPersona spersona;
     
   
     @PostMapping("/entrenar")
@@ -111,7 +116,7 @@ public class CReconocimiento
     }
     
     @PostMapping("/asignarrecurso")
-    public ResponseEntity<?> AsignarRecurso(@RequestBody  String base64recurso)
+    public ResponseEntity<?> AsignarRecurso(@RequestBody AsignarRecursoRequestCombinada data)
     {
         Map<String,Object> response=new HashMap();
         try
@@ -119,14 +124,20 @@ public class CReconocimiento
             System.out.println("Recurso: jejeje ");
             //System.out.println(new JSONObject( base64recurso).getString("base64recurso"));
 
-            String ooiduser=ApiReconocimiento.AsignarRecurso(new JSONObject( base64recurso).getString("base64recurso").replace("\n",""));
+            String ooiduser=ApiReconocimiento.AsignarRecurso(data.getBase64recurso().replace("\n",""));
 
             System.out.println("OOID= "+ooiduser);
-            
-//String ooiduser="";
-            
+                        
             if(ooiduser!=null)
             {
+                List<ModelPersona> mp=spersona.BuscarPorIdPersona(data.getIdpersona());
+                if(mp.size()>0)
+                {
+                    ModelPersona mpg=mp.get(0);
+                    mpg.setEtiquetareconocer(ooiduser);
+                    spersona.actualizar(mpg,false);
+                }
+                
                 response.put(Messages.SUCCESSFUL_KEY, Messages.ENTRENADO_CORRECTAMENTE);
                 response.put(Messages.OOID, ooiduser);
             }
@@ -154,8 +165,8 @@ public class CReconocimiento
         {
             System.out.println("Recurso: jejeje ");
             System.out.println(base64recurso);
-            //JSONObject jo=ApiReconocimiento.Reconocer(base64recurso);
-            JSONObject jo=null;
+            JSONObject jo=ApiReconocimiento.Reconocer(base64recurso,srecursos.listar().get(0).getNombremodeloxml().trim());
+            //JSONObject jo=null;
 
             if(jo!=null)
             {

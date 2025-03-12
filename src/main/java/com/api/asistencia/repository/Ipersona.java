@@ -21,7 +21,8 @@ public interface Ipersona extends JpaRepository<ModelPersona,Serializable>
 {  
     public List<ModelPersona> findByEstadopersona(Boolean estado);   
     public List<ModelPersona> findByIdpersona(Long idpersona);   
-    public List<ModelPersona> findByCorreo(String correo);   
+    public List<ModelPersona> findByCorreo(String correo); 
+    public List<ModelPersona> findByEtiquetareconocer(String etiqueta_reconocer);
     
     @Query(value="select * from func_listarpersonaportipo(:idtipopersona)",nativeQuery=true)  
     public String findPorTipoPersona(Integer idtipopersona);   
