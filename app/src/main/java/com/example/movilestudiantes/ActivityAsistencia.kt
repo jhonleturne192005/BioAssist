@@ -28,6 +28,7 @@ class ActivityAsistencia : AppCompatActivity() {
 
     companion object{
         var KEYIDHORARIO:String="idhorario";
+        var KEYIDASISTENCIA:String="idasistencia";
     }
 
 

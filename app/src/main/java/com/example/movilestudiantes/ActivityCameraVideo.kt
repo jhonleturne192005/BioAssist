@@ -111,45 +111,54 @@ class ActivityCameraVideo : AppCompatActivity()
 
                 //Log.i("videobase64dd",base64video);
 
+                try{
 
+                    val objDataResponseReconocimiento= RetrofitService().getRetrofit().create(
+                        ApiService::class.java).asignarrecurso(AsignarRecursoRequest(base64video,GlobalDataUser.userId!!));
 
-                var objDataResponseReconocimiento= RetrofitService().getRetrofit().create(
-                    ApiService::class.java).asignarrecurso(AsignarRecursoRequest(base64video));
-
-                if(objDataResponseReconocimiento.isSuccessful)
-                {
-
-                    try
+                    if(objDataResponseReconocimiento.isSuccessful)
                     {
-                        val asignacionrecursosreconocimiento=objDataResponseReconocimiento.body()!!;
 
-                        val objDataActualizarEtiqueta= RetrofitService().getRetrofit().create(
-                            ApiService::class.java).ActualizarEtiquetaReconocimientoPersona(GlobalDataUser.userId!!,asignacionrecursosreconocimiento.ooid);
-
-                        if(objDataActualizarEtiqueta.isSuccessful)
+                        GlobalDataUser.etiquetareconocer=objDataResponseReconocimiento.body()!!.ooid;
+                        withContext(Dispatchers.Main)
                         {
-                            withContext(Dispatchers.Main)
-                            {
-                                ToastMessage().toast(
-                                    this@ActivityCameraVideo,
-                                    objDataActualizarEtiqueta.body()!!.successful
-                                )
-                            }
+                            ToastMessage().toast(
+                                this@ActivityCameraVideo,
+                                objDataResponseReconocimiento.body()!!.successful
+                            )
                         }
+                        /*try
+                        {
+                            val asignacionrecursosreconocimiento=objDataResponseReconocimiento.body()!!;
 
+                            val objDataActualizarEtiqueta= RetrofitService().getRetrofit().create(
+                                ApiService::class.java).ActualizarEtiquetaReconocimientoPersona(GlobalDataUser.userId!!,asignacionrecursosreconocimiento.ooid);
+
+                            if(objDataActualizarEtiqueta.isSuccessful)
+                            {
+                                withContext(Dispatchers.Main)
+                                {
+                                    ToastMessage().toast(
+                                        this@ActivityCameraVideo,
+                                        objDataActualizarEtiqueta.body()!!.successful
+                                    )
+                                }
+                            }
+
+                        }
+                        catch (e: Exception)
+                        {
+                            Log.i(DataStatic.LogError, e.message.toString())
+                        }*/
                     }
-                    catch (e: Exception)
-                    {
-                        Log.i(DataStatic.LogError, e.message.toString())
-                    }
+                }
+                catch (e: Exception)
+                {
+                    Log.i(DataStatic.LogError, e.message.toString())
                 }
             }
 
         }
-
-
-
-
     }
 
 
@@ -173,9 +182,9 @@ class ActivityCameraVideo : AppCompatActivity()
                 videoCapture = VideoCapture.withOutput(recorder)
 
 
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                //val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                //val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
                 try {
                     // Unbind use cases before rebinding
@@ -285,7 +294,7 @@ class ActivityCameraVideo : AppCompatActivity()
                 curRecording.stop()
                 recording = null
             }
-        }, 3000)
+        }, 15000)
     }
 
 

@@ -64,7 +64,7 @@ data class ReconocimientoResponse
 
 data class ActualizarDatosUsuarioResponse
     (
-    @SerializedName("dispositivo") val dispositivo:Int,
+    @SerializedName("dispositivo") val dispositivo:Boolean,
     @SerializedName("dispositivomensaje") val dispositivomensaje:String,
     @SerializedName("successful") val successful:String,
 ): Serializable
@@ -148,5 +148,15 @@ data class DiaSemanaResponse(
 
 
 data class AsignarRecursoRequest(
-    val base64recurso: String
+    val base64recurso: String,
+    val idpersona:Int
+)
+
+data class AsignarRecursoRequestAsistencia(
+    val base64recurso: String,
+    val idpersona: Int,
+    val idhorario: Int,
+    val idphone: String,
+    val latitud: String,
+    val longitud: String
 )

@@ -27,7 +27,7 @@ interface ApiService
     suspend fun listarPorIdPersona(@Field("idpersona") idpersona: Int): Response<DataPersona>;
 
     @FormUrlEncoded
-    @POST("/api/persona/save")
+    @POST("/api/persona/actualizardatosusuario")
     suspend fun guardarInformacion(
         @Field("idpersona") idpersona: Int,
         @Field("correo") correo: String,
@@ -37,7 +37,7 @@ interface ApiService
         @Field("contrasenia") contrasenia: String,
         @Field("idgenero") genero: Int,
         @Field("credenciales_telefono") credenciales_telefono: String,
-        @Field("etiqueta_reconocer") etiqueta_reconocer: String,
+        @Field("etiquetareconocer") etiqueta_reconocer: String,
         ): Response<ActualizarDatosUsuarioResponse>;
 
 
@@ -46,6 +46,8 @@ interface ApiService
     suspend fun login(
         @Field("correo") correo: String,
         @Field("contrasenia") contrasenia: String,
+        @Field("latitud") latitud: String,
+        @Field("longitud") longitud: String,
     ): Response<LoginResponse>;
 
 
@@ -57,14 +59,11 @@ interface ApiService
     ): Response<DataSuccess>;
 
 
-    @FormUrlEncoded
+
     @POST("/api/asistencia/crear")
     suspend fun asistencia(
-        @Field("idpersona") idpersona: Int,
-        @Field("idhorario") idhorario: Int,
-        @Field("ubicacion_radio") ubicacion_radio: String,
-    ): Response<DataSuccess>;
-
+        @Body base64recurso: AsignarRecursoRequestAsistencia
+        ): Response<DataSuccess>;
 
     @POST("/api/reconocimiento/asignarrecurso")
     suspend fun asignarrecurso(@Body base64recurso: AsignarRecursoRequest): Response<DataReconocimientoAsignarRecurso>;

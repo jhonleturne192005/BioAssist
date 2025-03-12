@@ -5,7 +5,9 @@ import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,18 +27,22 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.movilestudiantes.ActivityAsistencia.Companion.KEYIDHORARIO
 import com.example.movilestudiantes.databinding.ActivityCameraBinding
 import com.example.movilestudiantes.utils.ApiService
 import com.example.movilestudiantes.utils.AsignarRecursoRequest
+import com.example.movilestudiantes.utils.AsignarRecursoRequestAsistencia
 import com.example.movilestudiantes.utils.DataStatic
 import com.example.movilestudiantes.utils.GlobalDataUser
+import com.example.movilestudiantes.utils.LocationService
 import com.example.movilestudiantes.utils.RetrofitService
 import com.example.movilestudiantes.utils.ToastMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -58,6 +64,7 @@ class ActivityCamera : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService;
     private var idhorario=0;
     private var base64imagen="";
+    private val locationService: LocationService = LocationService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +108,45 @@ class ActivityCamera : AppCompatActivity() {
         }
 
         binding.btnenviarfoto.setOnClickListener{
-            CoroutineScope(Dispatchers.IO).launch {
+            
+            lifecycleScope.launch {
+
+                val result=locationService.getUserLocation(this@ActivityCamera)
+                if(result!=null)
+                {
+                    var objDataResponseMatricula= RetrofitService().getRetrofit().create(ApiService::class.java).asistencia(
+                    AsignarRecursoRequestAsistencia(base64imagen,GlobalDataUser.userId!!,idhorario,GlobalDataUser.IDPHONE,result.latitude.toString(),result.longitude.toString()));
+
+                    if(objDataResponseMatricula.isSuccessful)
+                    {
+                        val toast= ToastMessage()
+
+                        try {
+                            withContext(Dispatchers.Main)
+                            {
+                                toast.toast(
+                                    this@ActivityCamera,
+                                    objDataResponseMatricula.body()!!.successful
+                                );
+
+                                val intent = Intent(this@ActivityCamera, ActivityAsistencia::class.java)
+                                startActivity(intent)
+
+                            }
+                        }
+                        catch (e: Exception)
+                        {
+                            withContext(Dispatchers.Main)
+                            {
+                                toast.toast(this@ActivityCamera, toast.informacionErrorMessageGuardar);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            /*lifecycleScope.launch {
 
                 var objDataResponseReconocimiento= RetrofitService().getRetrofit().create(
                     ApiService::class.java).reconocer(AsignarRecursoRequest(base64imagen));
@@ -113,30 +158,35 @@ class ActivityCamera : AppCompatActivity() {
 
                         if(reconocimiento.data.reconocio)
                         {
-                            var objDataResponseMatricula= RetrofitService().getRetrofit().create(ApiService::class.java).asistencia(
-                                GlobalDataUser.userId!!,idhorario,"");
-                            if(objDataResponseMatricula.isSuccessful)
+
+                            val result=locationService.getUserLocation(this@ActivityCamera)
+                            if(result!=null)
                             {
-                                val toast= ToastMessage()
-
-                                try {
-                                    withContext(Dispatchers.Main)
-                                    {
-                                        toast.toast(
-                                            this@ActivityCamera,
-                                            objDataResponseMatricula.body()!!.successful
-                                        );
-
-                                        val intent = Intent(this@ActivityCamera, ActivityAsistencia::class.java)
-                                        startActivity(intent)
-
-                                    }
-                                }
-                                catch (e: Exception)
+                                var objDataResponseMatricula= RetrofitService().getRetrofit().create(ApiService::class.java).asistencia(
+                                    GlobalDataUser.userId!!,idhorario,GlobalDataUser.IDPHONE,result.latitude.toString(),result.longitude.toString());
+                                if(objDataResponseMatricula.isSuccessful)
                                 {
-                                    withContext(Dispatchers.Main)
+                                    val toast= ToastMessage()
+
+                                    try {
+                                        withContext(Dispatchers.Main)
+                                        {
+                                            toast.toast(
+                                                this@ActivityCamera,
+                                                objDataResponseMatricula.body()!!.successful
+                                            );
+
+                                            val intent = Intent(this@ActivityCamera, ActivityAsistencia::class.java)
+                                            startActivity(intent)
+
+                                        }
+                                    }
+                                    catch (e: Exception)
                                     {
-                                        toast.toast(this@ActivityCamera, toast.informacionErrorMessageGuardar);
+                                        withContext(Dispatchers.Main)
+                                        {
+                                            toast.toast(this@ActivityCamera, toast.informacionErrorMessageGuardar);
+                                        }
                                     }
                                 }
                             }
@@ -155,7 +205,7 @@ class ActivityCamera : AppCompatActivity() {
                         Log.i(DataStatic.LogError, e.message.toString())
                     }
                 }
-            }
+            }*/
 
         }
 
@@ -196,9 +246,10 @@ class ActivityCamera : AppCompatActivity() {
                     .also {
                         it.setSurfaceProvider(binding.videopreview.surfaceProvider)
                     }
-                imageCapture = ImageCapture.Builder().build()
+                imageCapture = ImageCapture.Builder()
+                    .build()
 
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
                 try {
                     // Unbind use cases before rebinding
@@ -276,10 +327,13 @@ class ActivityCamera : AppCompatActivity() {
 
                         val byteimg=Base64.decode(base64img,Base64.DEFAULT)
                         val bitmap = BitmapFactory.decodeByteArray(byteimg,0,byteimg.size)
+                        val mirroredBitmap = mirrorBitmap(bitmap)
+
+                        //base64imagen=encodeImage(mirroredBitmap)!!;
 
                         binding.videopreview.visibility= View.GONE;
                         binding.imagepreview.visibility=View.VISIBLE;
-                        binding.imagepreview.setImageBitmap(bitmap)
+                        binding.imagepreview.setImageBitmap(mirroredBitmap)
 
                     } catch(exc: Exception) {
                         Log.e("ERROR_CAMARA",  exc.message.toString())
@@ -290,8 +344,18 @@ class ActivityCamera : AppCompatActivity() {
         )
     }
 
+    fun mirrorBitmap(bitmap: Bitmap): Bitmap {
+        val matrix = Matrix()
+        matrix.preScale(-1f, 1f) // Invierte horizontalmente
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
 
-
+    private fun encodeImage(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
 
 
 

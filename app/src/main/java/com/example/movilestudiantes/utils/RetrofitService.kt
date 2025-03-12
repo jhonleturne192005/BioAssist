@@ -28,13 +28,19 @@ class SessionCookieJar : CookieJar {
 
 //Usamos el CookieJar personalizado para una sola cookie
 //se asigna solo una vez
-val okHttpClient = OkHttpClient.Builder()
+/*val okHttpClient = OkHttpClient.Builder()
     .connectTimeout(60, TimeUnit.SECONDS) // Tiempo para establecer conexión
     .readTimeout(60, TimeUnit.SECONDS) // Tiempo de espera para la respuesta
     .writeTimeout(60, TimeUnit.SECONDS) // Tiempo para enviar datos
     .cookieJar(SessionCookieJar())
-    .build()
+    .build()*/
 
+val okHttpClient = OkHttpClient.Builder()
+    .connectTimeout(60, TimeUnit.SECONDS) // Tiempo para establecer conexión
+    .readTimeout(60, TimeUnit.HOURS) // Tiempo de espera para la respuesta
+    .writeTimeout(60, TimeUnit.SECONDS) // Tiempo para enviar datos
+    .cookieJar(SessionCookieJar())
+    .build()
 
 class RetrofitService
 {

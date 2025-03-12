@@ -79,6 +79,21 @@
             android:textColor="#FFFFFF"
             android:padding="5dp" />
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pepilla"
+            android:id="@+id/latlong"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pepilla"
+            android:id="@+id/datatelefono"/>
+
+
+
     </LinearLayout>
 
 

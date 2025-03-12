@@ -147,31 +147,48 @@ class ActivityInformacion : AppCompatActivity()
         val contrasenia=binding.etContrasenia.text.toString().trim();
 
         if(!correo.equals("") && !nombres.equals("") && !apellidos.equals("") &&
-            !numero_telefono.equals("") && !contrasenia.equals("") && selectindexgenero!=0) {
+            !numero_telefono.equals("") && selectindexgenero!=0)
+        {
             CoroutineScope(Dispatchers.IO).launch {
-                var objDataResponseInformacion= RetrofitService().getRetrofit().create(ApiService::class.java).guardarInformacion(
-                    GlobalDataUser.userId!!,correo,nombres,apellidos,numero_telefono,contrasenia,selectindexgenero,"ac", GlobalDataUser.etiquetareconocer!!);
 
-                val toast=ToastMessage()
+                Log.i("datapepa",GlobalDataUser.userId!!.toString())
+                Log.i("datapepa",selectindexgenero.toString())
+                Log.i("datapepa",GlobalDataUser.IDPHONE)
+                Log.i("datapepa",correo)
+                Log.i("datapepa",nombres)
+                Log.i("datapepa",apellidos)
+                Log.i("datapepa_cell",numero_telefono)
+                //Log.i("datapepa_contra",contrasenia)
+                //Log.i("datapepa_etiq",GlobalDataUser.etiquetareconocer!!)
 
-                if(objDataResponseInformacion.isSuccessful) {
-                    withContext(Dispatchers.Main)
-                    {
-                        toast.toast(
-                            this@ActivityInformacion,
-                            objDataResponseInformacion.body()!!.successful
-                        )
+                try{
+                    val objDataResponseInformacion= RetrofitService().getRetrofit().create(ApiService::class.java).guardarInformacion(GlobalDataUser.userId!!,correo,nombres,apellidos,numero_telefono,contrasenia,selectindexgenero,GlobalDataUser.IDPHONE, "");
 
+                    val toast=ToastMessage()
+
+                    if(objDataResponseInformacion.isSuccessful) {
+                        withContext(Dispatchers.Main)
+                        {
+                            toast.toast(
+                                this@ActivityInformacion,
+                                objDataResponseInformacion.body()!!.successful
+                            )
+
+                        }
+                    }else {
+                        withContext(Dispatchers.Main)
+                        {
+                            toast.toast(
+                                this@ActivityInformacion,
+                                toast.informacionErrorMessageActualizar
+                            );
+
+                        }
                     }
-                }else {
-                    withContext(Dispatchers.Main)
-                    {
-                        toast.toast(
-                            this@ActivityInformacion,
-                            toast.informacionErrorMessageActualizar
-                        );
-
-                    }
+                }
+                catch (e: Exception)
+                {
+                    Log.i(DataStatic.LogError, e.message.toString())
                 }
             }
         }

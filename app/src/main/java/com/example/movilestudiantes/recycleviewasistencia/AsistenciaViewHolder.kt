@@ -20,7 +20,6 @@ class AsistenciaViewHolder(val binding: ItemAsistenciaBinding): RecyclerView.Vie
         binding.curso.text=Data.idmateriasporpersona.idmateria.idcurso.curso;
         binding.profesor.text=Data.idmateriasporpersona.idpersona.nombres+" "+Data.idmateriasporpersona.idpersona.apellidos;
         binding.horario.text=Data.iddiassemana.dia+", "+horario;
-
-        binding.btnregistrarasistencia.setOnClickListener{eventRegistrarAsistencia(Data.idmateriasporpersona.idmateriaporpersona,"")}
+        binding.btnregistrarasistencia.setOnClickListener{eventRegistrarAsistencia(Data.idhorario,"")}
     }
 }
