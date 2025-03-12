@@ -12,15 +12,13 @@ import base64
 from io import BytesIO
 from datetime import datetime
 from PIL import Image
-from keras_preprocessing.image import ImageDataGenerator, img_to_array
-import random
 
 ruta=os.path.join(STATICFILES_DIRS[0],"imagenes/")
 ruta_video=os.path.join(STATICFILES_DIRS[0],"video/")
 ruta_models=os.path.join(STATICFILES_DIRS[0],"models/")
 ruta_imagen_reconocimiento_all=os.path.join(STATICFILES_DIRS[0],"imgrec/")
 face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+"haarcascade_frontalface_default.xml")
-_NUMERO_IMAGENES=3000
+_NUMERO_IMAGENES=500
 
 
 class REP:
@@ -66,21 +64,9 @@ class REP:
         else:
             return False
 
- 
+    
+    
     def segmentar_video(self):
-        #Data Augmentation
-        cant_images_increased=15
-
-        train_datagen = ImageDataGenerator(
-            rotation_range=20,        # Rota imágenes aleatoriamente hasta 20 grados.
-            zoom_range=0.2,           # Aplica zoom aleatorio (hasta un 20% de aumento/reducción).
-            width_shift_range=0.1,     # Desplaza imágenes horizontalmente (hasta un 10% del ancho).
-            height_shift_range=0.1,   # Desplaza imágenes verticalmente (hasta un 10% del alto).
-            horizontal_flip=True,     # Voltea imágenes horizontalmente de forma aleatoria.
-            vertical_flip=False        # No voltea imágenes verticalmente.
-        )
-
-
         #para crear carpeta si no existe
         if not os.path.exists(self.personpath):
             print("carpeta inexistente"+ self.personpath)
@@ -94,10 +80,6 @@ class REP:
         #Si existe error en el video lo cierra
         if (cap.isOpened() == False):
             print("Error al abrir el video")
-
-
-        print("fase uno") 
-        contaa=0
 
         while True:
             ret, frame=cap.read()
@@ -117,59 +99,12 @@ class REP:
 
 
             for(x,y, width, height) in faces:
-                contaa+=1
                 #obtiene el rostro 
                 rostro=auxf[y:y+height,x:x+width]
                 #redimenciona
                 rostro=cv2.resize(rostro,(720,720),interpolation=cv2.INTER_CUBIC)
-                p=rostro/255
-                p=np.expand_dims(p,axis=0)
                 #guarda la imagen
                 cv2.imwrite(ruta+self.nombre+'/img_{}.jpg'.format(uuid.uuid4()),rostro)
-
-                cont=0
-
-                for output_batch in train_datagen.flow(p, batch_size=1):
-                    imagen = output_batch[0] * 255           
-                    imgfinal = imagen.astype('uint8')  
-                    cv2.imwrite(self.personpath+'/img_{}.jpg'.format(uuid.uuid4()),imgfinal)
-                    cont+=1
-                    if(cont>cant_images_increased):
-                        break
-        
-            #evitar esperar mas tiempó a recorrer todos los frames
-            #quitar si quieres recorrer todos los frames y adicionalmente generar mas imagenes segun la variable __NUMERO_IMAGENES
-            lista_usuario=os.listdir(ruta+"/{}".format(self.nombre))
-            longitud_lista=len(lista_usuario)
-            if(longitud_lista>=_NUMERO_IMAGENES):
-                break
-        
-        print("fase dos") 
-
-        while True:
-            lista_usuario=os.listdir(ruta+"/{}".format(self.nombre))
-            longitud_lista=len(lista_usuario)
-            print(len(lista_usuario))
-
-            if(longitud_lista>=_NUMERO_IMAGENES):
-                break
-
-            posaleatoria = random.randint(0, longitud_lista-1)
-            print(posaleatoria)
-            image=cv2.imread(ruta+"/{0}/{1}".format(self.nombre,lista_usuario[posaleatoria]))
-            imaged=cv2.resize(image,(720,720),interpolation=cv2.INTER_CUBIC)
-            p=imaged/255
-            p=np.expand_dims(p,axis=0)
-
-            cont=0
-
-            for output_batch in train_datagen.flow(p, batch_size=1):
-                imagen = output_batch[0] * 255           
-                imgfinal = imagen.astype('uint8')  
-                cv2.imwrite(self.personpath+'/img_{}.jpg'.format(uuid.uuid4()),imgfinal)
-                cont+=1
-                if(cont>cant_images_increased):
-                    break
 
         #liberar recursos del hardware
         self.verificar_cantidad_archivos()
@@ -189,13 +124,14 @@ class REP:
 
         label=0
 
+
         for nombre_person in lista_usuarios:
             #completa la ruta con el usuario actual
             personRuta=ruta+"/"+nombre_person
             print(nombre_person)
             for fileName in os.listdir(personRuta):
 
-                #print(fileName)
+                print(fileName)
 
                 facesdata.append(cv2.imread(personRuta+'/'+fileName,0))
                 labels.append(label)
@@ -204,7 +140,6 @@ class REP:
 
         #EigenFaceRecognizer, LBPHFaceRecognizer_create y FisherFaceRecognizer_create
         #Existen mas modelos de reconocimientos aunquen utilizamos este por la rapidez y optimizacion de espacio
-        #face_recognizer=cv2.face.LBPHFaceRecognizer_create(radius=2, neighbors=12, grid_x=10, grid_y=10)
         face_recognizer=cv2.face.LBPHFaceRecognizer_create()
 
         print("Entrenando")
@@ -219,14 +154,14 @@ class REP:
 
         return name_model
     
+
+
     def reconocer_imagen(self,base_64_image,nombre_modelo):
 
         lista_usuarios=os.listdir(ruta)
-        face_recognizer=cv2.face.LBPHFaceRecognizer_create(radius=2, neighbors=12, grid_x=10, grid_y=10)
 
-        f=open(ruta_models+"/ott.txt","w")
-        f.write(str(base_64_image))
-        f.close()
+
+        face_recognizer=cv2.face.LBPHFaceRecognizer_create()
 
         #captura el video (el videocapture recibe la ruta donde esta el video)
         #image=cv2.imread("imagengrupal.jpg")
@@ -240,14 +175,12 @@ class REP:
 
         #cambia a escala de grises
         gray=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (3,3), 0)
-        gray = cv2.equalizeHist(gray)  # Mejora el contraste en la imagen
 
         faces=face_cascade.detectMultiScale(gray,
                                             scaleFactor=1.05, #indica la reduccion de la imagen (valores pequeño aseguran la deteccion)
                                             minNeighbors=5,  #indica los minimos de rectangulos que puede tener un rostro para ser detectado
-                                            minSize=(30,30), #indica el tamaño minimo del objeto para ser detectado
-                                            maxSize=(500,500)) #indica el tamaño maximo del objeto
+                                            minSize=(10,10), #indica el tamaño minimo del objeto para ser detectado
+                                            maxSize=(300,300)) #indica el tamaño maximo del objeto
 
         etiqueta_reconocida_all="N/A"
         reconocio=False
@@ -261,7 +194,7 @@ class REP:
             result=face_recognizer.predict(rostro)
             print(result)
 
-            if(int(result[1])<=80): #ignoro decimales con int()
+            if(result[1]<=80):
                 reconocio=True
                 etiqueta_reconocida_all=lista_usuarios[result[0]]
                 cv2.putText(image,'{}'.format(lista_usuarios[result[0]]),(x,y+40),2,1.1,(0,0,0),1,cv2.LINE_AA)
@@ -276,5 +209,55 @@ class REP:
         buffercode.seek(0)
         
         base64img=base64.b64encode(buffercode.read()).decode('utf-8')
-       
+        #f = open(ruta_models+"myfile.txt",'w')
+        #f.write(str(base64img))
+        #f.close()
+
+        #print(base64img)
+        #print(type(image))
+        #cv2.imshow('image',image)
+        #cv2.imwrite(ruta_imagen_reconocimiento_all+'{}.png',image)
+        #cv2.waitKey(0)
+        #cv2.destroyAllWindows()
         return [etiqueta_reconocida_all,reconocio,base64img]
+
+
+
+    #Esta funcion se encarga de reconocer los rostros con el modelo entrenado anteriormente
+    """def reconocer(self,base_64_image,nombre_modelo):
+
+        face_recognizer=cv2.face.LBPHFaceRecognizer_create()
+
+        #captura el video (el videocapture recibe la ruta donde esta el video)
+        cap=cv2.VideoCapture("video_jhon.mp4")
+
+        #lee el modelo
+        face_recognizer.read(ruta_models+nombre_modelo)
+        result=None
+        while True:
+            ret, frame=cap.read()
+            #si captura frame
+            if ret==False:
+                break
+            
+            #cambia a escala de grises
+            gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+            #realiza una copia del frame
+            auxf=gray.copy()
+
+            faces=face_cascade.detectMultiScale(gray,1.3,5)
+
+            for (x,y,w,h) in faces:
+                rostro=auxf[y:y+h,x:x+w]
+                rostro=cv2.resize(rostro,(150,150),interpolation=cv2.INTER_CUBIC)
+                #aqui hace la prediccion del rostro
+                result=face_recognizer.predict(rostro)
+                print(result)
+
+        lista_usuarios=os.listdir(ruta)
+        print("***")
+        print(lista_usuarios[result[0]])
+        print(result[1])"""
+
+           

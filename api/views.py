@@ -34,6 +34,7 @@ def asignar_recurso(request):
     if request.method == 'POST':
         #print(request.data)
         video_base_64=request.data["video"]
+        #print(video_base_64)
         nombre_usuario_ooid=str(uuid.uuid4())
         rep=REP(nombre_usuario_ooid,video_base_64)
         rep.segmentar_video()
