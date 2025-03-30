@@ -34,6 +34,10 @@ def asignar_recurso(request):
     if request.method == 'POST':
         #print(request.data)
         video_base_64=request.data["video"]
+        
+        f=open(ruta_models+"/ott.txt","w")
+        f.write(str(video_base_64))
+        f.close()
         #print(video_base_64)
         nombre_usuario_ooid=str(uuid.uuid4())
         rep=REP(nombre_usuario_ooid,video_base_64)
@@ -74,6 +78,9 @@ def reconocer(request):
         modelo=request.data["model"]
         rep=REP(None,None)
         etiqueta_reconocimiento=rep.reconocer_imagen(imagen_base_64,modelo)
+        print("ETIQUETA= "+etiqueta_reconocimiento[0])
+        print("RECONOCIO= "+str(etiqueta_reconocimiento[1]))
+
         data["success"]="todo realizado con exito"
         data["etiqueta"]=etiqueta_reconocimiento[0]
         data["reconocio"]=etiqueta_reconocimiento[1]
