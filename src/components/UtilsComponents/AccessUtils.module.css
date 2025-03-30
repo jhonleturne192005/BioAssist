@@ -46,3 +46,15 @@
  .select_option:hover {
     background-color: #f0f0f0;
   }
+
+  .container_registro
+  {
+      display: grid;
+      place-items: center;
+      height: 100vh;
+  }
+  
+  .formWi{
+      width: 500px;
+  }
+    

@@ -7,10 +7,8 @@ import ButtonEstadoAsistencia from "../UtilsComponents/ButtonEstadoAsistencia";
 function ListarMatriculados()
 {
     const { idmateriasporpersona } = useParams();
-
     const formData = new FormData();
     formData.append('idmateriaporpersona',String(idmateriasporpersona));
-
     const arrayCurso=UseFetchPOST(formData,'materiaporpersona/listarasistenciamatriculados',true).data.data as unknown as InterfaceAsistenciaMatriculados[];
 
     return(
@@ -48,11 +46,7 @@ function ListarMatriculados()
             
             </div>
         </>
-       
-    
     );
-
 }
-
 
 export default ListarMatriculados;

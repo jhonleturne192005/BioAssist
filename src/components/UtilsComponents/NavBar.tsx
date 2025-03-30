@@ -16,11 +16,23 @@ function NavBar() {
     navigate("/");
   }
 
+  const stylebackgroundColor = {
+    backgroundColor: "#343A40",
+  }
+
+  const styleLetrasColor = {
+    color: "#9A9D9A"
+  }
+
+  const styleLetrasColorWhite = {
+    color: "#FFF"
+  }
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+
+    <nav className="navbar navbar-expand-lg " style={stylebackgroundColor}>
+      <div className="container-fluid"  >
+        <a className="navbar-brand" href="#" style={styleLetrasColorWhite}>
             BioAssist
         </a>
         <button
@@ -37,13 +49,19 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarScroll">
           <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
             <li className="nav-item">
-              <Link to={"/materiasprofesor"} className="nav-link active">
+              <Link to={"/materiasprofesor"} className="nav-link active" style={styleLetrasColor}>
                 Asistencias
+              </Link>
+            </li>
+            
+            <li className="nav-item">
+              <Link to={"/reconocimiento"} className="nav-link active" style={styleLetrasColor}>
+                Entrenamiento (prueba)
               </Link>
             </li>
           </ul>
           <form className="d-flex" role="search">
-            <button className="btn btn-outline-success" type="submit" onClick={cerrar_session}>
+            <button className="btn btn-success"  style={styleLetrasColorWhite} type="submit" onClick={cerrar_session}>
               Cerrar Session
             </button>
           </form>

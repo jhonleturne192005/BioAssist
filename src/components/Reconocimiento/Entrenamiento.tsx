@@ -1,11 +1,10 @@
-import NavBarAdmin from "../UtilsComponents/NavBarAdmin";
-import styles from "../Curso/Curso.module.css"
 import {  UseFetchPOSTEvent } from "../../useFetch";
 import toast from "react-hot-toast";
 import { KEY } from "../../Messages";
 import { InterfaceRecurso } from "../../interfaces/InterfaceRecurso";
 import { useEffect, useState } from "react";
-
+import styles from '../UtilsComponents/AccessUtils.module.css'
+import NavBar from "../UtilsComponents/NavBar";
 
 function Entrenamiento()
 {
@@ -63,7 +62,7 @@ function Entrenamiento()
 
     return(
         <>
-            <NavBarAdmin/>
+            <NavBar/>
 
             <div className="container mt-5 ">
                 <table className="table table-sm">

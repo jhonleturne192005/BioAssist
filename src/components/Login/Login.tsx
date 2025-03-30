@@ -3,7 +3,9 @@ import { ADMIN, ERROR_CAMPOS_VACIOS, KEY } from "../../Messages";
 import { UseFetchPOSTEvent } from "../../useFetch";
 import { InterfaceLogin } from "../../interfaces/InterfaceLogin";
 import { useNavigate } from "react-router-dom";
-import styles from "../Curso/Curso.module.css"
+//import styles from '../UtilsComponents/AccessUtils.module.css'
+
+
 
 function Login()
 {
@@ -48,12 +50,12 @@ function Login()
                         toast.error(dataLogin.successful);
                         return;
                     } 
-                    alert(String(dataLogin.admin))
+                    //alert(String(dataLogin.admin))
                     localStorage.setItem(ADMIN,String(dataLogin.admin));
                     localStorage.setItem(KEY,dataLogin.correo);
                     console.log(data);
                     toast.success(data.data.successful)
-                    navigate("/home");
+                    navigate("/materiasprofesor");
                 })
                 .catch(err=>toast.error(err.response.data.error));
 
@@ -70,7 +72,7 @@ function Login()
     }
 
 
-    return (
+   /* return (
         <div className={styles.container_registro}>
             <form method="POST" name="form" className={styles.formWi} onSubmit={handleClickLogin} >
                 <div className="mb-3 controles_input">
@@ -84,7 +86,29 @@ function Login()
                 <button type="submit" className="btn btn-primary">Iniciar Sesion</button>
             </form>
         </div>
-    );
+    );*/
+
+    return (
+        <div className="d-flex vh-100 bg-dark justify-content-center align-items-center">
+          <div className="card p-4 shadow-lg" style={{ backgroundColor: "#343A40", color: "#FFF", width: "350px" }}>
+            <div className="text-center mb-4">
+              <img src="/bioassistredonda.svg" alt="Logo" width="100" className="mb-2" />
+              <h3 className="fw-bold">Iniciar Sesión</h3>
+            </div>
+            <form method="POST" name="form" onSubmit={handleClickLogin} > 
+              <div className="mb-3">
+                <label className="form-label">Correo</label>
+                <input type="email" className="form-control bg-secondary text-white border-0" placeholder="Correo" id="correo" maxLength={100} required name="correo" />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Contraseña</label>
+                <input type="password" className="form-control bg-secondary text-white border-0" placeholder="Contraseña" id="contrasenia" required name="contrasenia" />
+              </div>
+              <button className="btn btn-primary w-100">Iniciar Sesión</button>
+            </form>
+          </div>
+        </div>
+      );
 }
 
 

@@ -8,7 +8,6 @@ function ListarMateriasProfesor()
 {
     const formData = new FormData();
     formData.append('correopersona',String(localStorage.getItem(KEY)));
-
     const arrayCurso=UseFetchPOST(formData,'materiaporpersona/listarporpersona',true).data.data as unknown as InterfaceMateriaPorPersona[];
 
     return(
