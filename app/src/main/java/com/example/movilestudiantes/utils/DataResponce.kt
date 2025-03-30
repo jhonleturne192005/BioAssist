@@ -30,6 +30,17 @@ class DataPersona
 ):Serializable
 
 
+class DataMateriasProfesor
+    (
+    @SerializedName("data") val data:List<MateriasProfesoresRequest>,
+):Serializable
+
+class DataAsistenciaMatriculados
+    (
+    @SerializedName("data") val data:List<AsistenciaMatriculadosRequest>,
+):Serializable
+
+
 /*reconocimiento*/
 
 class DataReconocimientoAsignarRecurso
@@ -71,6 +82,7 @@ data class ActualizarDatosUsuarioResponse
 
 data class LoginResponse
     (
+    @SerializedName("tipousuario") val tipousuario:String,
     @SerializedName("id") val id:Int,
     @SerializedName("estado") val estado:Boolean,
     @SerializedName("etiqueta_reconocer") val etiqueta_reconocer:String,
@@ -160,3 +172,27 @@ data class AsignarRecursoRequestAsistencia(
     val latitud: String,
     val longitud: String
 )
+
+/*nuevoooo*/
+
+data class MateriasProfesoresRequest(
+    @SerializedName("idmateriaporpersona")  val idmateriaporpersona:Int,
+    @SerializedName("idmateria")  val idmateria: MateriaResponse,
+    @SerializedName("idpersona")  val idpersona: PersonaResponse
+)
+
+data class AsistenciaMatriculadosRequest(
+    @SerializedName("idmateriaporpersona") val idmateriaporpersona: Int,
+    @SerializedName("idmateria") val idmateria: Int,
+    @SerializedName("idpersona") val idpersona: Int,
+    @SerializedName("apellidos") val apellidos: String,
+    @SerializedName("asistencia") val asistencia: Boolean,
+    @SerializedName("etiqueta_reconocer") val etiquetaReconocer: String,
+    @SerializedName("numero_telefono") val numeroTelefono: String,
+    @SerializedName("correo") val correo: String,
+    @SerializedName("genero") val genero: String,
+    @SerializedName("idmatriculacion") val idmatriculacion: Int,
+    @SerializedName("nombres") val nombres: String
+)
+
+

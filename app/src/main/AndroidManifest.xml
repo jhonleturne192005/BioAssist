@@ -5,19 +5,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.camera.any" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
-
-    <!-- ACCESS_COARSE_LOCATION >> localizacion aproximada del usuario  -->
-    <!-- ACCESS_FINE_LOCATION >> localizacion mas precisa del usuario  -->
+        android:maxSdkVersion="28" /> <!-- ACCESS_COARSE_LOCATION >> localizacion aproximada del usuario -->
+    <!-- ACCESS_FINE_LOCATION >> localizacion mas precisa del usuario -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -31,6 +30,12 @@
         android:theme="@style/Theme.Movilestudiantes"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ActivityProfesorMaterias"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityProfesorAsitenciasMatriculados"
+            android:exported="false" />
         <activity
             android:name=".ActivityMenu"
             android:exported="false" />

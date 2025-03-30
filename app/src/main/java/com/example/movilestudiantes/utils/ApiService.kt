@@ -18,6 +18,7 @@ interface ApiService
     @POST("/api/horario/listar")
     suspend fun listarHorario(): Response<DataHorario>;
 
+
     @FormUrlEncoded
     @POST("/api/asistencia/listarmateriaparaasistenciaporestudiante")
     suspend fun listarMateriaPorEstudianteParaAsistencia(@Field("idpersona") idpersona: Int): Response<DataHorario>;
@@ -60,7 +61,7 @@ interface ApiService
 
 
 
-    @POST("/api/asistencia/crear")
+    @POST("/api/reconocimiento/crearasistencia")
     suspend fun asistencia(
         @Body base64recurso: AsignarRecursoRequestAsistencia
         ): Response<DataSuccess>;
@@ -77,5 +78,15 @@ interface ApiService
     @POST("/api/persona/actualizaretiquetareconocimientousuario")
     suspend fun ActualizarEtiquetaReconocimientoPersona(@Field("idpersona") idpersona: Int,
                           @Field("etiqueta") etiqueta: String): Response<DataSuccess>;
+
+    /*nuevooo profesores*/
+
+    @FormUrlEncoded
+    @POST("/api/materiaporpersona/listarporpersona")
+    suspend fun ListarMateriasProfesores(@Field("correopersona") correopersona: String): Response<DataMateriasProfesor>;
+
+    @FormUrlEncoded
+    @POST("/api/materiaporpersona/listarasistenciamatriculados")
+    suspend fun ListarAsistenciaMatriculados(@Field("idmateriaporpersona") idmateriaporpersona: Int): Response<DataAsistenciaMatriculados>;
 
 }

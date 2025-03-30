@@ -70,7 +70,7 @@ class ActivityLogin : AppCompatActivity() {
                             GlobalDataUser.Email=loginresponse.correo;
                             GlobalDataUser.Login=loginresponse.estado;
                             GlobalDataUser.etiquetareconocer=loginresponse.etiqueta_reconocer;
-
+                            GlobalDataUser.tipousuario=loginresponse.tipousuario.toString().trim()
                             val intent = Intent(this@ActivityLogin, ActivityMenu::class.java)
                             startActivity(intent)
                         }

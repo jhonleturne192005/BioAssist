@@ -46,6 +46,9 @@ class ActivityInformacion : AppCompatActivity()
 
     fun init()
     {
+        if(GlobalDataUser.tipousuario=="profesor") {
+            binding.btnenviarvideo.visibility = View.GONE;
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
 

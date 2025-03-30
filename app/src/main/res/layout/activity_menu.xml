@@ -63,6 +63,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnmatricula"/>
 
+        <Button
+            android:id="@+id/btnmateriasprofesores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Materias"
+            android:backgroundTint="@color/colorButtons"
+            android:textColor="#FFFFFF"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnasistencia"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,5 +15,5 @@ object GlobalDataUser {
     var IDPHONE:String=""
     var latitud:String=""
     var longitud:String=""
-
+    var tipousuario:String=""
 }
