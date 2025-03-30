@@ -2,15 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.api.asistencia.controller;
+package com.api.asistencia.controllerReconocimiento;
 
 import com.api.asistencia.models.ModelAsistencia;
-import com.api.asistencia.models.ModelCurso;
 import com.api.asistencia.models.ModelHorario;
-import com.api.asistencia.models.ModelMatriculacion;
+import com.api.asistencia.models.ModelMaterias;
 import com.api.asistencia.models.ModelPersona;
+import com.api.asistencia.models.ModelRecursos;
 import com.api.asistencia.service.SAsistencia;
-import com.api.asistencia.service.SCurso;
 import com.api.asistencia.service.SHorario;
 import com.api.asistencia.service.SPersona;
 import com.api.asistencia.service.SRecursos;
@@ -37,8 +36,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author USUARIO
  */
 @RestController
-@RequestMapping("/api/asistencia")
-public class CAsistencia 
+@RequestMapping("/api/reconocimiento")
+public class CReconocimiento 
 {
     @Autowired 
     SAsistencia sasistencia;
@@ -46,19 +45,175 @@ public class CAsistencia
     @Autowired
     SHorario shorario;
     
+    @Autowired
+    SRecursos srecursos;
+    
     @Autowired 
     SPersona spersona;
     
-    @Autowired
-    private SRecursos srecursos;
+    @PostMapping("/entrenar")
+    public ResponseEntity<?> EntrenarModelo()
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {   
+            String nombre_modelo=ApiReconocimiento.EntrenarModelo();
+            if(nombre_modelo!=null)
+            {
+                List<ModelRecursos> lstmodelrecursos=srecursos.listar();
+                nombre_modelo=nombre_modelo+".xml";
+                ModelRecursos mr=null;
+                
+                if(!lstmodelrecursos.isEmpty())
+                {
+                    mr=lstmodelrecursos.get(0);
+                    mr.setNombremodeloxml(nombre_modelo);
+                }
+                else
+                {
+                    mr=new ModelRecursos();
+                    mr.setNombremodeloxml(nombre_modelo);
+                }
+                
+                srecursos.crear_actualizar(mr);
+
+                response.put(Messages.SUCCESSFUL_KEY, Messages.ENTRENADO_CORRECTAMENTE);
+                response.put(Messages.MODELO, nombre_modelo);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+   
     
-    @PostMapping("/crear")
+    @PostMapping("/listar")
+    public ResponseEntity<?> ListarRecursos()
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelRecursos> lstmodelrecursos=srecursos.listar();
+
+            if(!lstmodelrecursos.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lstmodelrecursos);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.NO_DATA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+    @PostMapping("/asignarrecurso")
+    public ResponseEntity<?> AsignarRecurso(@RequestBody AsignarRecursoRequestCombinada data)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {   
+            System.out.println("Recurso: jejeje ");
+                      //  System.out.println("Recurso: jejeje "+data.getBase64recurso());
+
+            //System.out.println(new JSONObject( base64recurso).getString("base64recurso"));
+
+            String ooiduser=ApiReconocimiento.AsignarRecurso( new String(data.getBase64recurso()));
+
+            System.out.println("OOID= "+ooiduser);
+                        
+            if(ooiduser!=null)
+            {
+                List<ModelPersona> mp=spersona.BuscarPorIdPersona(data.getIdpersona());
+                if(mp.size()>0)
+                {
+                    ModelPersona mpg=mp.get(0);
+                    mpg.setEtiquetareconocer(ooiduser);
+                    spersona.actualizar(mpg,false);
+                }
+                
+                response.put(Messages.SUCCESSFUL_KEY, Messages.RECURSO_ASIGNADO_CORRECTAMENTE);
+                response.put(Messages.OOID, ooiduser);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+   
+    
+    @PostMapping("/reconocer")
+    public ResponseEntity<?> Reconocer(@RequestParam(value="base64recurso") String base64recurso)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            System.out.println("Recurso: jejeje ");
+            System.out.println(base64recurso);
+            JSONObject jo=ApiReconocimiento.Reconocer(base64recurso,srecursos.listar().get(0).getNombremodeloxml().trim());
+            //JSONObject jo=null;
+
+            if(jo!=null)
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.RECONOCIDO_CORRECTAMENTE);
+                response.put(Messages.DATA, jo);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+
+    @PostMapping("/crearasistencia")
     public ResponseEntity<?> CrearAsistencia(
             @RequestBody AsignarRecursoRequestCombinada data)
     {
         Map<String,Object> response=new HashMap();
         try
         {
+            System.out.println("DATOS**********");
+            System.out.println("id horario= "+data.getIdhorario());
+            System.out.println("ID TELEFONO= "+data.getIdphone());
+            System.out.println("ID PERSONA= "+data.getIdpersona());
+            System.out.println("LATITUD= "+data.getLatitud());
+            System.out.println("LONGITUD= "+data.getLongitud());
+
             List<ModelPersona> lstmodelpersona=spersona.BuscarPorIdPersona(data.getIdpersona());
             List<ModelHorario> lstmodelhorario=shorario.ListarHorario(data.getIdhorario());
 
@@ -75,6 +230,8 @@ public class CAsistencia
                 String etiqueta=jo.getString("etiqueta"); //si no existe genera una excepcion que es capturada
                 //a3889740-49e6-47fd-a79b-7503fc6b8f21
                 
+                System.out.println("ESTA ES LA ETIQUETA= "+etiqueta);
+
                 //String etiqueta="a3889740-49e6-47fd-a79b-7503fc6b8f21";
                 List<ModelPersona> lstmp=spersona.BuscarPorEtiquetaPersona(etiqueta);
                 
@@ -84,11 +241,13 @@ public class CAsistencia
                         usuarioreconocido=true; 
                 }
                 else{
+                    System.out.println("Usuario no reconocido");
                     response.put(Messages.ERROR_KEY, "Usuario no reconocido");
                     return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST); 
                 }
             }
             else{
+                System.out.println("ERROR");
                 response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
                 return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
             }
@@ -178,99 +337,4 @@ public class CAsistencia
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
 
     }
-
-  
-    @PostMapping("/listarmateriaparaasistenciaporestudiante")
-    public ResponseEntity<?> ListarMateriaPorAsistenciaPorEstudiante(@RequestParam(value="idpersona") Long idpersona)
-    {
-        System.out.println("jajaja= "+idpersona);
-        Map<String,Object> response=new HashMap();
-        try
-        {
-            List<ModelHorario> lstmpg=sasistencia.ListarMateriaParaAsistenciaPorEstudiante(idpersona);
-
-            if(!lstmpg.isEmpty())
-            {
-                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
-                response.put(Messages.DATA, lstmpg);
-            }
-            else
-            {
-                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
-            }
-        }
-        catch(Exception ex)
-        {
-            String error=ex.getMessage();
-            System.out.println(error);
-            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-        }
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
-    }
-    
- 
-    
-    
-    
-    /*NO SE USAN*/
-    
-    
-    @PostMapping("/listarporpersona")
-    public ResponseEntity<?> ListarAsistenciaPorPersona(@RequestParam(value="idpersona") Long idpersona)
-    {
-        Map<String,Object> response=new HashMap();
-        try
-        {
-            List<ModelAsistencia> lstmpg=sasistencia.ListarAsistenciaPorPersona(idpersona);
-
-            if(!lstmpg.isEmpty())
-            {
-                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
-                response.put(Messages.DATA, lstmpg);
-            }
-            else
-            {
-                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
-            }
-        }
-        catch(Exception ex)
-        {
-            String error=ex.getMessage();
-            System.out.println(error);
-            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-        }
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
-    }
-    
-    
-    @PostMapping("/listarporhorario")
-    public ResponseEntity<?> ListarAsistenciaPorHorario(@RequestParam(value="idhorario") Long idhorario)
-    {
-        Map<String,Object> response=new HashMap();
-        try
-        {
-            List<ModelAsistencia> lstmpg=sasistencia.ListarAsistenciaPorHorario(idhorario);
-
-            if(!lstmpg.isEmpty())
-            {
-                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
-                response.put(Messages.DATA, lstmpg);
-            }
-            else
-            {
-                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
-            }
-        }
-        catch(Exception ex)
-        {
-            String error=ex.getMessage();
-            System.out.println(error);
-            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-        }
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
-    }
-    
 }

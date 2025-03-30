@@ -25,5 +25,11 @@ public class SDiaSemana
     {
         return idiasemana.findAll();
     }
+    
+    public ModelDiasSemana guardar(ModelDiasSemana mds)
+    {
+        return idiasemana.save(mds);
+    }
+    
    
 }

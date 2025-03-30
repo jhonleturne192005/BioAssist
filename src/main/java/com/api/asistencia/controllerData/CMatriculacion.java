@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.api.asistencia.controller;
+package com.api.asistencia.controllerData;
 
 import com.api.asistencia.models.ModelCurso;
 import com.api.asistencia.models.ModelMatriculacion;

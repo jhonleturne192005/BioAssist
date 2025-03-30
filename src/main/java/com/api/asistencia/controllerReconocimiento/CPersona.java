@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.api.asistencia.controller;
+package com.api.asistencia.controllerReconocimiento;
 
 import com.api.asistencia.models.ModelPersona;
 import com.api.asistencia.models.ModelTipoPersona;
@@ -70,6 +70,7 @@ public class CPersona
                         response.put("etiqueta_reconocer", lstmpb.get(0).getEtiquetareconocer());
                         response.put("id", lstmpb.get(0).getIdpersona()); 
                         response.put("admin", mpd.getAdministrador()); 
+                        response.put("tipousuario", mpd.getIdtipopersona().getTipo().toLowerCase()); 
                         response.put(Messages.ESTADO,true); 
                         session.setAttribute(correo, mpd);
                     }
@@ -534,11 +535,4 @@ public class CPersona
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
-    
-    
-    
-    
-    
-    
-    
 }

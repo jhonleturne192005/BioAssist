@@ -17,6 +17,8 @@ public class Messages
     public static String INICIO_SESSION_CORRECTO="Ha iniciado session correctamente";
     public static String CERRAR_SESSION="La session se cerro correctamente";
     public static String ENTRENADO_CORRECTAMENTE="El modelo se a entrenado correctamente";
+    public static String RECURSO_ASIGNADO_CORRECTAMENTE="El recurso se asigno correctamente";
+    public static String RECONOCIDO_CORRECTAMENTE="El modelo reconocio correctamente";
     public static String MENSAJE_DISPOSITIVO="Los datos del dispositivo se actualizaron correctamente";
 
     

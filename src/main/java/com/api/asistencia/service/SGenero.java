@@ -26,4 +26,13 @@ public class SGenero
     {
         return igenero.findAll();
     }
+    
+    
+    public ModelGenero guardar(ModelGenero mg)
+    {
+        return igenero.save(mg);
+    }
+    
+    
+    
 }

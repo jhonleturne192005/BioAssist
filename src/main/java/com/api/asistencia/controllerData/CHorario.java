@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.api.asistencia.controller;
+package com.api.asistencia.controllerData;
 
-import com.api.asistencia.models.ModelMaterias;
-import com.api.asistencia.models.ModelPersona;
-import com.api.asistencia.service.SMaterias;
-import com.api.asistencia.service.SPersona;
+import com.api.asistencia.models.ModelCurso;
+import com.api.asistencia.models.ModelHorario;
+import com.api.asistencia.service.SHorario;
 import com.api.asistencia.utils.Messages;
 import java.util.HashMap;
 import java.util.List;
@@ -25,23 +24,27 @@ import org.springframework.web.bind.annotation.RestController;
  * @author USUARIO
  */
 @RestController
-@RequestMapping("/api/materia")
-public class CMateria 
+@RequestMapping("/api/horario")
+public class CHorario 
 {
-    @Autowired 
-    SMaterias smaterias;
+    
+    @Autowired
+    SHorario shorario;
     
     
     @PostMapping("/crear")
-    public ResponseEntity<?> CrearMateria(ModelMaterias modelmaterias)
+    public ResponseEntity<?> CrearHorario(ModelHorario modelhorario)
     {
         Map<String,Object> response=new HashMap();
         try
         {
-            if(modelmaterias.getMateria().trim()!="")
+            if(modelhorario.getIdmateriasporpersona()!=null && 
+               modelhorario.getIddiassemana()!=null && modelhorario.getHora_inicio()!=null && 
+                modelhorario.getMinuto_inicio()!=null && modelhorario.getHora_fin()!=null && 
+                    modelhorario.getMinuto_fin()!=null)
             {
-                ModelMaterias mmg=smaterias.guardar(modelmaterias);
-                if(mmg.getIdmateria()>0)
+                ModelHorario mmg=shorario.guardar(modelhorario);
+                if(mmg.getIdhorario()>0)
                     response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
             }
             else
@@ -54,98 +57,36 @@ public class CMateria
         {
             String error=ex.getMessage();
             System.out.println(error);
-            if(error.contains(Messages.EX_MATERIA))
-                response.put(Messages.ERROR_KEY, Messages.MATERIA_EXISTENTE);
-            else
-                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-        }
-        
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
-
-    }
-    
-    @PostMapping("/desactivar")
-    public ResponseEntity<?> DesactivarMateria(@RequestParam(value="idmateria") Long idmateria)
-    {
-        Map<String,Object> response=new HashMap();
-        try
-        {
-            
-            List<ModelMaterias> lstbusquedamaterias=smaterias.BuscarPorIdMateria(idmateria);
-            
-            if(idmateria!=null)
-            {
-                ModelMaterias mmg=smaterias.desactivar(lstbusquedamaterias.get(0));
-                if(mmg.getIdmateria()>0)
-                    response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
-            }
-            else
-            {
-                response.put(Messages.ERROR_KEY, Messages.ERROR_DATOS_INCOMPLETOS);
-                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
-            }
-        }
-        catch(Exception ex)
-        {
-            String error=ex.getMessage();
             response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
         }
         
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
 
     }
-    
-    
-    
-    @PostMapping("/activar")
-    public ResponseEntity<?> ActivarMateria(@RequestParam(value="idmateria") Long idmateria)
-    {
-        Map<String,Object> response=new HashMap();
-        try
-        {
-            
-            List<ModelMaterias> lstbusquedamaterias=smaterias.BuscarPorIdMateria(idmateria);
-            
-            if(idmateria!=null)
-            {
-                ModelMaterias mmg=smaterias.activar(lstbusquedamaterias.get(0));
-                if(mmg.getIdmateria()>0)
-                    response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
-            }
-            else
-            {
-                response.put(Messages.ERROR_KEY, Messages.ERROR_DATOS_INCOMPLETOS);
-                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
-            }
-        }
-        catch(Exception ex)
-        {
-            String error=ex.getMessage();
-            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-        }
-        
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
-
-    }
-    
     
     
     @PostMapping("/actualizar")
-    public ResponseEntity<?> ActualizarMateria(ModelMaterias modelmaterias)
+    public ResponseEntity<?> ActualizarHorario(ModelHorario modelhorario)
     {
         Map<String,Object> response=new HashMap();
         try
         {
-            
-            List<ModelMaterias> lstbusquedamaterias=smaterias.BuscarPorIdMateria(modelmaterias.getIdmateria());
-
-            if(modelmaterias.getMateria().trim()!="")
+            if(modelhorario.getIdmateriasporpersona()!=null && 
+               modelhorario.getIddiassemana()!=null && modelhorario.getHora_inicio()!=null && 
+                modelhorario.getMinuto_inicio()!=null && modelhorario.getHora_fin()!=null && 
+                    modelhorario.getMinuto_fin()!=null)
             {
-                ModelMaterias mma=lstbusquedamaterias.get(0);
-                mma.setMateria(modelmaterias.getMateria());
+                List<ModelHorario> lsthorarios=shorario.ListarHorario(modelhorario.getIdhorario());
+                ModelHorario mo=lsthorarios.get(0);
+                mo.setIdmateriasporpersona(modelhorario.getIdmateriasporpersona());
+                mo.setIddiassemana(modelhorario.getIddiassemana());
+                mo.setHora_inicio(modelhorario.getHora_inicio());
+                mo.setHora_fin(modelhorario.getHora_fin());
+                mo.setMinuto_inicio(modelhorario.getMinuto_inicio());
+                mo.setMinuto_fin(modelhorario.getMinuto_fin());
                 
-                ModelMaterias mmg=smaterias.actualizar(mma);
-                if(mmg.getIdmateria()>0)
+                ModelHorario mmg=shorario.actualizar(mo);
+                if(mmg.getIdhorario()>0)
                     response.put(Messages.SUCCESSFUL_KEY, Messages.DATOS_GUARDADOS); 
             }
             else
@@ -157,26 +98,85 @@ public class CMateria
         catch(Exception ex)
         {
             String error=ex.getMessage();
+            System.out.println(error);
             response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
         }
         
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
 
+    }
+
+    
+    @PostMapping("/listarhorarioporcurso")
+    public ResponseEntity<?> ListarHorariosporcurso(@RequestParam(value="idcurso") Long idcurso)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelHorario> lsthorarios=shorario.ListarHorarioPorCurso(idcurso);
+
+            if(!lsthorarios.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lsthorarios);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+    }
+    
+    
+    @PostMapping("/obtenerhorarioporid")
+    public ResponseEntity<?> ObtenerHorarioPorId(@RequestParam(value="idhorario") Long idhorario)
+    {
+        Map<String,Object> response=new HashMap();
+        try
+        {
+            List<ModelHorario> lsthorarios=shorario.ListarHorario(idhorario);
+
+            if(!lsthorarios.isEmpty())
+            {
+                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
+                response.put(Messages.DATA, lsthorarios);
+            }
+            else
+            {
+                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
+            }
+        }
+        catch(Exception ex)
+        {
+            String error=ex.getMessage();
+            System.out.println(error);
+            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
+        }
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
     
     
     @PostMapping("/listar")
-    public ResponseEntity<?> ListarMaterias()
+    public ResponseEntity<?> Listar()
     {
         Map<String,Object> response=new HashMap();
         try
         {
-            List<ModelMaterias> lstmaterias=smaterias.listar();
+            List<ModelHorario> lsthorarios=shorario.Listar();
 
-            if(!lstmaterias.isEmpty())
+            if(!lsthorarios.isEmpty())
             {
                 response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
-                response.put(Messages.DATA, lstmaterias);
+                response.put(Messages.DATA, lsthorarios);
             }
             else
             {
@@ -192,41 +192,6 @@ public class CMateria
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
-    
-    
-    
-    
-    @PostMapping("/obtenermateriaid")
-    public ResponseEntity<?> ObtenerMateriaPorID(@RequestParam(value="idmateria") Long idmateria)
-    {
-        Map<String,Object> response=new HashMap();
-        try
-        {
-            List<ModelMaterias> lstmaterias=smaterias.BuscarPorIdMateria(idmateria);
-
-            if(!lstmaterias.isEmpty())
-            {
-                response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
-                response.put(Messages.DATA, lstmaterias);
-            }
-            else
-            {
-                response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);  
-            }
-        }
-        catch(Exception ex)
-        {
-            String error=ex.getMessage();
-            System.out.println(error);
-            response.put(Messages.ERROR_KEY, Messages.ERROR_SISTEMA);
-        }
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
-    }
-    
-    
-    
-    
     
     
 }

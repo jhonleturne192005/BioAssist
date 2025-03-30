@@ -80,7 +80,9 @@ public class ApiReconocimiento
             int statusCode = response.getStatus();
             String respuesta = response.readEntity(String.class);
             respuesta=respuesta.translateEscapes();
+            
             respuesta=respuesta.substring(1,respuesta.length()-1);
+            System.out.println("respuesta= "+respuesta);
             JSONObject jo=new JSONObject(respuesta);
             if (statusCode == 200) {
                 System.out.println(respuesta);

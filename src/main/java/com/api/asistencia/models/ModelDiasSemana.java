@@ -28,7 +28,6 @@ import lombok.Setter;
 public class ModelDiasSemana 
 {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     Long iddia;
     
     @Column(name = "dia", nullable = false, unique = false, length = 20)

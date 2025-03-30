@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.api.asistencia.controller;
+package com.api.asistencia.controllerData;
 
 import com.api.asistencia.models.ModelCurso;
-import com.api.asistencia.models.ModelGenero;
-import com.api.asistencia.service.SGenero;
+import com.api.asistencia.models.ModelDiasSemana;
+import com.api.asistencia.service.SDiaSemana;
+import com.api.asistencia.service.SPersona;
 import com.api.asistencia.utils.Messages;
 import java.util.HashMap;
 import java.util.List;
@@ -23,24 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @author USUARIO
  */
 @RestController
-@RequestMapping("/api/genero")
-public class CGenero 
+@RequestMapping("/api/diassemana")
+public class CDiasSemana 
 {
-    @Autowired
-    SGenero sgenero;
+    @Autowired 
+    SDiaSemana sdiasemana;
+    
     
     @PostMapping("/listar")
-    public ResponseEntity<?> ListarGenero()
+    public ResponseEntity<?> ListarDiasSemana()
     {
         Map<String,Object> response=new HashMap();
         try
         {
-            List<ModelGenero> lstgenero=sgenero.listar();
+            List<ModelDiasSemana> lstdiassemana=sdiasemana.listar();
 
-            if(!lstgenero.isEmpty())
+            if(!lstdiassemana.isEmpty())
             {
                 response.put(Messages.SUCCESSFUL_KEY, Messages.OPERACION_CORRECTA);
-                response.put(Messages.DATA, lstgenero);
+                response.put(Messages.DATA, lstdiassemana);
             }
             else
             {
@@ -56,7 +58,6 @@ public class CGenero
         }
         return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
     }
-    
     
     
 }
